@@ -1,0 +1,265 @@
+/*!
+ * Datepicker for Bootstrap
+ *
+ * Copyright 2012 Stefan Petre
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ */
+.datepicker {
+    background-color: #fff !important;
+    background-image: url("images/molb/sdp.png?6ba90f7196e362bc87b098bcea780bbb") !important;
+    background-position: right -2457px;
+    background-repeat: no-repeat;
+    cursor: pointer !important;
+    height:30px;
+    width:224px !important;
+
+}
+.datepicker:before {
+  content: '';
+  display: inline-block;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid #ccc;
+  border-bottom-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: -7px;
+  left: 6px;
+}
+.datepicker:after {
+  content: '';
+  display: inline-block;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #ffffff;
+  position: absolute;
+  top: -6px;
+  left: 7px;
+}
+.datepicker > div {
+  display: none;
+}
+.datepicker table {
+  width: 100%;
+  margin: 0;
+}
+.datepicker td,
+.datepicker th {
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.datepicker td.day:hover {
+  background: #eeeeee;
+  cursor: pointer;
+}
+.datepicker td.day.disabled {
+  color: #eeeeee;
+}
+.datepicker td.old,
+.datepicker td.new {
+  color: #999999;
+}
+.datepicker td.active,
+.datepicker td.active:hover {
+  color: #ffffff;
+  background-color: #006dcc;
+  background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+  background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  *background-color: #0044cc;
+  /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.datepicker td.active:hover,
+.datepicker td.active:hover:hover,
+.datepicker td.active:focus,
+.datepicker td.active:hover:focus,
+.datepicker td.active:active,
+.datepicker td.active:hover:active,
+.datepicker td.active.active,
+.datepicker td.active:hover.active,
+.datepicker td.active.disabled,
+.datepicker td.active:hover.disabled,
+.datepicker td.active[disabled],
+.datepicker td.active:hover[disabled] {
+  color: #ffffff;
+  background-color: #0044cc;
+  *background-color: #003bb3;
+}
+.datepicker td.active:active,
+.datepicker td.active:hover:active,
+.datepicker td.active.active,
+.datepicker td.active:hover.active {
+  background-color: #003399 \9;
+}
+.datepicker td span {
+  display: block;
+  width: 47px;
+  height: 54px;
+  line-height: 54px;
+  float: left;
+  margin: 2px;
+  cursor: pointer;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.datepicker td span:hover {
+  background: #eeeeee;
+}
+.datepicker td span.active {
+  color: #ffffff;
+  background-color: #006dcc;
+  background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+  background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  *background-color: #0044cc;
+  /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.datepicker td span.active:hover,
+.datepicker td span.active:focus,
+.datepicker td span.active:active,
+.datepicker td span.active.active,
+.datepicker td span.active.disabled,
+.datepicker td span.active[disabled] {
+  color: #ffffff;
+  background-color: #0044cc;
+  *background-color: #003bb3;
+}
+.datepicker td span.active:active,
+.datepicker td span.active.active {
+  background-color: #003399 \9;
+}
+.datepicker td span.old {
+  color: #999999;
+}
+.datepicker th.switch {
+  width: 145px;
+}
+.datepicker th.next,
+.datepicker th.prev {
+  font-size: 21px;
+}
+.datepicker thead tr:first-child th {
+  cursor: pointer;
+}
+.datepicker thead tr:first-child th:hover {
+  background: #eeeeee;
+}
+.input-append.date .add-on i,
+.input-prepend.date .add-on i {
+  display: block;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+/*Below three styles are for Datepicker extraHeader*/
+.cal-close-img {
+    background-image: url("images/molb/sdp.png?6ba90f7196e362bc87b098bcea780bbb") !important;
+    background-position: right -603px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    float: right;
+    height: 8px;
+    margin-right: 5px;
+    margin-top: 3px;
+    padding-right: 15px!important;
+    padding-top: 5px;
+}
+.cal-extraHeaderLeft{
+	width:90%;
+	text-align:left;
+	font-family: Arial,sans-serif;
+}
+.cal-extraHeaderRight{
+	width:10%;
+	text-align:right;
+	vertical-align:top;
+}
+/*Below two styles are for Datepicker Footer*/
+a.datePickerToday {
+	text-decoration: none!important;
+	color: #222222!important;
+	line-height: 30px;
+    padding: 5px;
+}
+.ui-datepicker-linkPane{
+	text-align:center;
+	padding:5px 5px 5px 5px!important;
+}
+/*Below four styles are for Datepicker dates*/		
+table.ui-datepicker-calendar a.ui-state-default{
+	border-color: white;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px;
+    cursor: default;
+    background-color: white;
+	background-image: none;
+	border-style:none;
+	text-align:center;
+}
+table.ui-datepicker-calendar a.ui-state-highlight {
+	cursor: default;
+	border: 1px solid grey !important;
+    color: blue;
+	margin:-2px;
+    font-weight: normal!important;
+	text-align:center;
+	background-color: white!important;
+	
+}
+table.ui-datepicker-calendar a.ui-state-hover {
+	cursor: default;
+    border: 1px solid black !important;
+	margin:-2px;
+    color: white!important;
+    font-weight: normal!important;
+	text-align:center;
+	background-color: green!important;
+	border-color:black!important;
+	
+}
+table.ui-datepicker-calendar  a.ui-state-active {
+	cursor: default;
+	color: green;
+    font-weight: bold!important;
+	text-align:center;
+	
+}
+
+table.ui-datepicker-calendar  td.ui-state-disabled span.ui-state-default{
+	background-color: white;
+    background-image: none;
+    border-color: none;
+    border-image: none;
+    border-style: none;
+}
+table.ui-datepicker-calendar  td.ui-state-disabled span.ui-state-default{
+	text-align:center!important;
+}
