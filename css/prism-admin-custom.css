@@ -184,9 +184,11 @@ ul, ol {
     border-top: #666666 solid 3px;
     margin-bottom: 20px;
     padding: 5px 0px;
+    width: calc(100% - 30px);
 }
 .table-row{;
     padding: 8px 0px;
+    width: calc(100% - 30px);
 }
 .row-margin{
     margin-bottom: 20px;
@@ -194,5 +196,10 @@ ul, ol {
 }
 .no-padding{
     padding: 0px;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
 }
 /**/
