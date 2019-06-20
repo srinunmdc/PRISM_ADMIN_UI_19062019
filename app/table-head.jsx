@@ -21,23 +21,27 @@ class tableHead extends React.Component {
 
   render() {
     return (
-      <thead>
+      <div className="row table-heading-row">
         {this.props.columns.map((col, i) => {
+          let column =
+            col.label == "Description"
+              ? "col-xs-3"
+              : col.label == ""
+              ? "col-xs-1"
+              : "col-xs-2";
           return (
-            <th scope="col" className={col.column}>
-              <div >
-                <span onClick={() => this.sort(col.value, i)}>{col.label}</span>
-                {col.value != "" && (
-                  <span
-                    className={this.state.caret[i] ? "caret up" : "caret"}
-                    aria-hidden="true"
-                  />
-                )}
-              </div>
-            </th>
+            <span className={`table-headings ${column}`}>
+              <span onClick={() => this.sort(col.value, i)}>{col.label}</span>
+              {col.value != "" && (
+                <span
+                  className={this.state.caret[i] ? "caret up" : "caret"}
+                  aria-hidden="true"
+                />
+              )}
+            </span>
           );
         })}
-      </thead>
+      </div>
     );
   }
 }
