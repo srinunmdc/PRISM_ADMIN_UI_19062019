@@ -127,7 +127,7 @@ class ResultTable extends React.Component {
         .getData()
         .replace(/\<p\>/g, "")
         .replace(/\<\/p\>/g, "")
-        .replace(/(&nbsp;)/g, " ");// evt.editor.document.getBody().getText();
+        .replace(/(&nbsp;)/g, " "); // evt.editor.document.getBody().getText();
       /* // For PUSH, SMS and MAIL_SUBJECT content should be plain and thymeleaf tags are in html, logic to handle the CKEditor formating
     var dynamicParams = newContent.match(/\$\{([^}]+)\}/gmi);
     var i;
@@ -201,7 +201,7 @@ class ResultTable extends React.Component {
         data = element;
       }
     });
-    data.changedContent = data.changedContent.replace(/(&zwnj;)/g,"")
+    data.changedContent = data.changedContent.replace(/(&zwnj;)/g, "");
     data.changedContent = addSpans(data.changedContent);
     // const regex = /\${\w*\}/g;
 
@@ -331,68 +331,70 @@ class ResultTable extends React.Component {
     const showIcon = hoverIndex === index ? "" : "invisible";
     return (
       <React.Fragment>
-        <tr
-          className={`${accordianEvenOdd} prism-table-row`}
-          onMouseEnter={() => this.handleMouseEnterOnRow(index)}
-          onMouseLeave={this.handleMouseLeaveonRow}
-          onClick={() => this.expandAccordian(obj)}
-        >
-          <td className="col-xs-2">{obj.displayAlertTypeName}</td>
-          <td className="col-xs-3">{obj.description}</td>
-          <td className="col-xs-2">{obj.platform}</td>
-          <td className="col-xs-2">{obj.vendor}</td>
-          <td className="col-xs-2">
-            <span
-              className="glyphicon glyphicon-envelope icon-margin"
-              style={obj.deliveryTypes.includes("EMAIL") ? {} : hidden}
-            />
-            <span
-              className="glyphicon glyphicon-comment icon-margin"
-              style={obj.deliveryTypes.includes("SMS") ? {} : hidden}
-            />
-            <span
-              className="glyphicon glyphicon-bell icon-margin"
-              style={obj.deliveryTypes.includes("PUSH") ? {} : hidden}
-            />
-          </td>
-          <td style={{ textAlign: "right" }} className="col-xs-1">
-            <span
-              className={
-                collapseID === obj.alertTypeId
-                  ? "glyphicon glyphicon-menu-up"
-                  : `glyphicon glyphicon-menu-down ${showIcon}`
-              }
-              style={{ padding: "0px 10px" }}
-            />
-          </td>
-        </tr>
-        {collapseID === obj.alertTypeId && (
-          <tr>
-            <td colSpan="6" style={{ padding: 0, maxWidth: "200px" }}>
-              <div
-                id={`accordion_${obj.alertTypeId}`}
-                className="accordian-border"
-              >
-                <EditorTabs
-                  editMode={editMode}
-                  edited={edited}
-                  onChangeSource={this.onChangeSource}
-                  onChange={this.onChange}
-                  onPublish={this.onPublish}
-                  onReject={this.onReject}
-                  rejectAlert={rejectAlert}
-                  onDraft={this.onDraft}
-                  onCancel={this.onCancel}
-                  onPreview={this.onPreview}
-                  onClickEdit={this.onClickEdit}
-                  showAlert={showAlert}
-                  closeAlert={this.closeAlert}
-                  wrongDynamicVariables={wrongDynamicVariables}
-                />
+        <div className="row-margin">
+          <div
+            className="row table-row"
+            onMouseEnter={() => this.handleMouseEnterOnRow(index)}
+            onMouseLeave={this.handleMouseLeaveonRow}
+            onClick={() => this.expandAccordian(obj)}
+          >
+            <div className="col-xs-2">{obj.displayAlertTypeName}</div>
+            <div className="col-xs-3 text-truncate">{obj.description}</div>
+            <div className="col-xs-2">{obj.platform}</div>
+            <div className="col-xs-2 text-truncate">{obj.vendor}</div>
+            <div className="col-xs-2">
+              <span
+                className="glyphicon glyphicon-envelope icon-margin"
+                style={obj.deliveryTypes.includes("EMAIL") ? {} : hidden}
+              />
+              <span
+                className="glyphicon glyphicon-comment icon-margin"
+                style={obj.deliveryTypes.includes("SMS") ? {} : hidden}
+              />
+              <span
+                className="glyphicon glyphicon-bell icon-margin"
+                style={obj.deliveryTypes.includes("PUSH") ? {} : hidden}
+              />
+            </div>
+            <div style={{ textAlign: "right" }} className="col-xs-1">
+              <span
+                className={
+                  collapseID === obj.alertTypeId
+                    ? "glyphicon glyphicon-menu-up"
+                    : `glyphicon glyphicon-menu-down ${showIcon}`
+                }
+                style={{ padding: "0px 10px" }}
+              />
+            </div>
+          </div>
+          {collapseID === obj.alertTypeId && (
+            <div className="row">
+              <div className="col-xs-12">
+                <div
+                  id={`accordion_${obj.alertTypeId}`}
+                  className="accordian-border"
+                >
+                  <EditorTabs
+                    editMode={editMode}
+                    edited={edited}
+                    onChangeSource={this.onChangeSource}
+                    onChange={this.onChange}
+                    onPublish={this.onPublish}
+                    onReject={this.onReject}
+                    rejectAlert={rejectAlert}
+                    onDraft={this.onDraft}
+                    onCancel={this.onCancel}
+                    onPreview={this.onPreview}
+                    onClickEdit={this.onClickEdit}
+                    showAlert={showAlert}
+                    closeAlert={this.closeAlert}
+                    wrongDynamicVariables={wrongDynamicVariables}
+                  />
+                </div>
               </div>
-            </td>
-          </tr>
-        )}
+            </div>
+          )}
+        </div>
       </React.Fragment>
     );
   };
@@ -438,10 +440,10 @@ class ResultTable extends React.Component {
 
     return (
       <React.Fragment>
-        <table className="table table-striped row">
+        <div>
           <Thead columns={columns} sort={this.sortFields} />
 
-          <tbody>
+          <div>
             {alertTypeStore.filteredAlertTypes
               ? sort(alertTypeStore.filteredAlertTypes, sortKey, sortOrder).map(
                   (obj, index) => {
@@ -453,8 +455,8 @@ class ResultTable extends React.Component {
                   }
                 )
               : null}
-          </tbody>
-        </table>
+          </div>
+        </div>
         <ConfirmModal
           show={confirmModalShow}
           close={this.declineEditing}

@@ -173,3 +173,26 @@ ul, ol {
 .prism-table-row:hover {
     cursor: pointer;
 }
+
+/*New Table*/
+.text-truncate{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.table-heading-row{
+    border-top: #666666 solid 3px;
+    margin-bottom: 20px;
+    padding: 5px 0px;
+}
+.table-row{;
+    padding: 8px 0px;
+}
+.row-margin{
+    margin-bottom: 20px;
+    box-shadow: -2px 3px 8px 0px rgba(102,102,102,0.5);
+}
+.no-padding{
+    padding: 0px;
+}
+/**/
