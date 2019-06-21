@@ -355,54 +355,51 @@ class ResultTable extends React.Component {
     return (
       <React.Fragment>
         <div className="row-margin">
-          <div
-            className="row table-row"
-            onMouseEnter={() => this.handleMouseEnterOnRow(index)}
-            onMouseLeave={this.handleMouseLeaveonRow}
-            onClick={e => this.expandAccordian(e, obj)}
-          >
-            <div className="col-xs-2">{obj.displayAlertTypeName}</div>
-            <div className="col-xs-3 text-truncate">{obj.description}</div>
-            <div className="col-xs-2">{obj.platform}</div>
-            <div className="col-xs-2 text-truncate">{obj.vendor}</div>
-            <div className="col-xs-2">
-              <span
-                className="glyphicon glyphicon-envelope icon-margin"
-                style={obj.deliveryTypes.includes("EMAIL") ? {} : hidden}
-                onClick={
-                  obj.deliveryTypes.includes("EMAIL")
-                    ? e => this.expandAccordian(e, obj, "EMAIL")
-                    : null
-                }
-              />
-              <span
-                className="glyphicon glyphicon-comment icon-margin"
-                style={obj.deliveryTypes.includes("SMS") ? {} : hidden}
-                onClick={
-                    obj.deliveryTypes.includes("SMS")
-                      ? e => this.expandAccordian(e, obj, "SMS")
-                      : null
-                  }
-              />
-              <span
-                className="glyphicon glyphicon-bell icon-margin"
-                style={obj.deliveryTypes.includes("PUSH") ? {} : hidden}
-                onClick={
-                    obj.deliveryTypes.includes("PUSH")
-                      ? e => this.expandAccordian(e, obj, "PUSH")
-                      : null
-                  }
-              />
-            </div>
-            <div style={{ textAlign: "right" }} className="col-xs-1">
+          <div className="flex" onClick={(e) => this.expandAccordian(e, obj)}>
+            <div style={{ width: "30px" }}>
               <span
                 className={
                   collapseID === obj.alertTypeId
                     ? "glyphicon glyphicon-menu-up"
-                    : `glyphicon glyphicon-menu-down ${showIcon}`
+                    : `glyphicon glyphicon-menu-down`
                 }
                 style={{ padding: "0px 10px" }}
               />
+            </div>
+            <div className="row table-row">
+              <div className="col-xs-2">{obj.displayAlertTypeName}</div>
+              <div className="col-xs-2">
+                <span
+                  className="glyphicon glyphicon-envelope icon-margin"
+                  style={obj.deliveryTypes.includes("EMAIL") ? {} : hidden}
+                  onClick={
+                    obj.deliveryTypes.includes("EMAIL")
+                      ? e => this.expandAccordian(e, obj, "EMAIL")
+                      : null
+                  }
+                />
+                <span
+                  className="glyphicon glyphicon-comment icon-margin"
+                  style={obj.deliveryTypes.includes("SMS") ? {} : hidden}
+                  onClick={
+                    obj.deliveryTypes.includes("SMS")
+                      ? e => this.expandAccordian(e, obj, "SMS")
+                      : null
+                  }
+                />
+                <span
+                  className="glyphicon glyphicon-bell icon-margin"
+                  style={obj.deliveryTypes.includes("PUSH") ? {} : hidden}
+                  onClick={
+                    obj.deliveryTypes.includes("PUSH")
+                      ? e => this.expandAccordian(e, obj, "PUSH")
+                      : null
+                  }
+                />
+              </div>
+              <div className="col-xs-4">{obj.description}</div>
+              <div className="col-xs-2">{obj.platform}</div>
+              <div className="col-xs-2">{obj.vendor}</div>
             </div>
           </div>
           {collapseID === obj.alertTypeId && (
@@ -456,12 +453,11 @@ class ResultTable extends React.Component {
 
   render() {
     const columns = [
-      { label: "Alert Type", value: "alertTypeName", column: "col-xs-2" },
-      { label: "Description", value: "description", column: "col-xs-3" },
+      { label: "Alert", value: "alertTypeName", column: "col-xs-2" },
+      { label: "Channel", value: "", column: "col-xs-2" },
+      { label: "Description", value: "description", column: "col-xs-4" },
       { label: "Platform", value: "platform", column: "col-xs-2" },
-      { label: "Alert Source", value: "vendor", column: "col-xs-2" },
-      { label: "Delivery Type", value: "", column: "col-xs-2" },
-      { label: "", value: "", column: "col-xs-1" }
+      { label: "Alert Source", value: "vendor", column: "col-xs-2" }
     ];
     const { alertTypeStore, alertTemplateStore } = this.props;
     const activeTab = alertTemplateStore.templateContentTypes.selected;

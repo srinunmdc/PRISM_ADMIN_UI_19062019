@@ -2,10 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import { inject, observer } from "mobx-react";
 import Editor from "./Editor";
-import Tab from "./Tab";
+import EditorControl from "./EditorControl";
+import EditorPreview from "./EditorPreview";
 import AlertTemplateResourceStore from "../store/AlertTemplateStore";
 
 @inject("alertTemplateStore")
+@inject("alertPermissionStore")
 @observer
 class EditorTabs extends React.Component {
   onClickTabItem(tab) {
@@ -19,6 +21,7 @@ class EditorTabs extends React.Component {
       alertTemplateStore,
       onChange,
       onChangeSource,
+      alertPermissionStore,
       onPublish,
       onReject,
       onDraft,
@@ -30,49 +33,60 @@ class EditorTabs extends React.Component {
       wrongDynamicVariables
     } = this.props;
     const activeTab = alertTemplateStore.templateContentTypes.selected;
+    const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
     return (
-      <div className="tabs">
-        <ul className="tab-list">
-          {alertTemplateStore.templateContentTypes.options &&
-            alertTemplateStore.templateContentTypes.options.map(element => {
-              const label = element;
-
-              return (
-                <Tab
-                  activeTab={activeTab}
-                  key={label}
-                  label={label}
-                  onClick={this.onClickTabItem.bind(this)}
-                />
-              );
-            })}
-        </ul>
-
-        <div className="tab-content">
-          {alertTemplateStore.alertTemplates.map(element => {
-            if (element.templateContentType !== activeTab) return undefined;
-            return (
-              <Editor
-                data={element}
-                editMode={editMode}
-                onChangeSource={onChangeSource}
-                onChange={onChange}
-                activeTab={activeTab}
-                edited={edited}
-                onPublish={onPublish}
-                onReject={onReject}
-                onDraft={onDraft}
-                onCancel={onCancel}
-                onPreview={onPreview}
-                onClickEdit={onClickEdit}
-                showAlert={showAlert}
-                closeAlert={closeAlert}
-                wrongDynamicVariables={wrongDynamicVariables}
-              />
-            );
-          })}
+      <React.Fragment>
+        <div className="editor-wrapper">
+          <div className="flex">
+            <div className="editor-left-wrapper">
+              {alertTemplateStore.alertTemplates.map(element => {
+                if (element.templateContentType !== activeTab) return undefined;
+                return (
+                  <Editor
+                    data={element}
+                    editMode={editMode}
+                    onChangeSource={onChangeSource}
+                    onChange={onChange}
+                    activeTab={activeTab}
+                    edited={edited}
+                    onPublish={onPublish}
+                    onReject={onReject}
+                    onDraft={onDraft}
+                    onCancel={onCancel}
+                    onPreview={onPreview}
+                    onClickEdit={onClickEdit}
+                    showAlert={showAlert}
+                    closeAlert={closeAlert}
+                    wrongDynamicVariables={wrongDynamicVariables}
+                  />
+                );
+              })}
+            </div>
+            <div className="editor-right-wrapper">
+              {alertTemplateStore.alertTemplates.map(element => {
+                if (element.templateContentType !== activeTab) return undefined;
+                return <EditorPreview data={element} />;
+              })}
+            </div>
+          </div>
         </div>
-      </div>
+        <div className="row button-wrapper">
+          {(role === "publish" || role === "edit") && (
+            <EditorControl
+              data={" "}
+              edited={edited}
+              editMode={editMode}
+              activeTab={activeTab}
+              onPublish={onPublish}
+              onReject={onReject}
+              onDraft={onDraft}
+              onCancel={onCancel}
+              onPreview={onPreview}
+              onClickEdit={onClickEdit}
+            />
+          )}
+        </div>
+      </React.Fragment>
     );
   }
 }
@@ -82,6 +96,7 @@ EditorTabs.propTypes = {
   editMode: PropTypes.object.isRequired,
   edited: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
+  onChangeSource: PropTypes.func.isRequired,
   onPublish: PropTypes.func.isRequired,
   onReject: PropTypes.func.isRequired,
   onDraft: PropTypes.func.isRequired,
