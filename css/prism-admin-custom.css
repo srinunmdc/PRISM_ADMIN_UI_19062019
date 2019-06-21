@@ -73,7 +73,7 @@ ul, ol {
     margin-left: 10px;
 }
 .accordian-border{
-    border: 1px solid #CCC;
+    border-top: 3px solid #CCC;
 }
 
 /*general classes*/
@@ -201,5 +201,22 @@ ul, ol {
 .flex{
     display: flex;
     align-items: center;
+}
+
+.editor-wrapper{
+    margin: 20px;
+}
+.editor-left-wrapper{
+    flex: 1;
+}
+
+.editor-right-wrapper{
+    flex: 1;
+}
+
+.button-wrapper{
+    margin: 20px;
+    border-top: 3px solid #CCC;
+    padding: 5px 0px; 
 }
 /**/
