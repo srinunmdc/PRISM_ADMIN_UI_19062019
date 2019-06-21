@@ -9,7 +9,7 @@ class AlertTemplateStore {
   @observable templateContentTypes = {};
 
   @action
-  setTemplates = (alertTemplateResources, isLoaded) => {
+  setTemplates = (alertTemplateResources, isLoaded, contentType) => {
     if (alertTemplateResources && Array.isArray(alertTemplateResources)) {
       const alertTemplates = this.processData(alertTemplateResources.slice());
 
@@ -21,7 +21,7 @@ class AlertTemplateStore {
         this.templateContentTypes.options = contentTypes;
       } else {
         this.templateContentTypes = {
-          selected: contentTypes[0],
+          selected: contentType || contentTypes[0],
           options: contentTypes
         };
       }
