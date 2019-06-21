@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { inject, observer } from "mobx-react";
 import Editor from "./Editor";
 import EditorControl from "./EditorControl";
+import EditorPreview from "./EditorPreview";
 import AlertTemplateResourceStore from "../store/AlertTemplateStore";
 
 @inject("alertTemplateStore")
@@ -64,25 +65,7 @@ class EditorTabs extends React.Component {
             <div className="editor-right-wrapper">
               {alertTemplateStore.alertTemplates.map(element => {
                 if (element.templateContentType !== activeTab) return undefined;
-                return (
-                  <Editor
-                    data={element}
-                    editMode={editMode}
-                    onChangeSource={onChangeSource}
-                    onChange={onChange}
-                    activeTab={activeTab}
-                    edited={edited}
-                    onPublish={onPublish}
-                    onReject={onReject}
-                    onDraft={onDraft}
-                    onCancel={onCancel}
-                    onPreview={onPreview}
-                    onClickEdit={onClickEdit}
-                    showAlert={showAlert}
-                    closeAlert={closeAlert}
-                    wrongDynamicVariables={wrongDynamicVariables}
-                  />
-                );
+                return <EditorPreview data={element} />;
               })}
             </div>
           </div>
