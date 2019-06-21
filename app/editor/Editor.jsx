@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { inject } from "mobx-react";
 import CKEditor from "./NewCKEditor";
 import replaceDynamicVariable from "../util/replaceDynamicVariable";
-import EditorControl from "./EditorControl";
+
 import Alert from "../Alert";
 
 @inject("alertPermissionStore")
@@ -52,7 +52,7 @@ class Editor extends React.Component {
         : "Unsupported Keyword";
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
     return (
-      <div className="col-md-12 col-sm-12 col-xs-12 editor-preview-wrapper">
+      <div>
         <div
           className="col-md-12 col-sm-12 col-xs-12 alert-wrapper"
           style={showAlertClass}
@@ -107,20 +107,6 @@ class Editor extends React.Component {
                 />
               </div>
             </React.Fragment>
-          )}
-          {(role === "publish" || role === "edit") && (
-            <EditorControl
-              data={data}
-              edited={edited}
-              editMode={editMode}
-              activeTab={activeTab}
-              onPublish={onPublish}
-              onReject={onReject}
-              onDraft={onDraft}
-              onCancel={onCancel}
-              onPreview={onPreview}
-              onClickEdit={onClickEdit}
-            />
           )}
         </div>
       </div>

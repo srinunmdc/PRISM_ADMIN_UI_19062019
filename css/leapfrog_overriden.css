@@ -1453,44 +1453,6 @@ body{
 	margin-left: 0px;
 }
 
-/*Bootstrap override css*/
-.table{
-	border-top: 0px;
-}
-.table tr td{
-	border: 0px !important;
-}
-.table thead{
-	border-bottom: 3px solid #333333 !important;
-}
-.table>tbody>tr>td {
-	padding: 17px 0px;
-}
-.table>tbody>tr>td:first-child {
-	padding: 17px 5px;
-}
-.table>thead>th {
-	padding: 10px 0px;
-}
-.table>thead>th:first-child {
-	padding: 10px 5px;
-}
-.table-striped>tbody>.prism-table-row__observer>tr:nth-of-type(odd) {
-    background-color: transparent;
-}
-.table-striped>tbody>.prism-table-row__observer>tr:nth-of-type(even) {
-    background-color: transparent;
-}
-.table-striped>tbody>.prism-table-row__observer>tr.not-accordian-even {
-    background-color: #f9f9f9;
-}
-
-.table-striped>tbody>.prism-table-row__observer>tr.not-accordian-odd {
-    background-color: transparent;
-}
-/*Bootstrap override css end*/
-
-
 .btn.sm{
 	min-width: 100px;
 }
