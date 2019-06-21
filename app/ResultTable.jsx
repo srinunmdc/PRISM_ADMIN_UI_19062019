@@ -33,6 +33,11 @@ class ResultTable extends React.Component {
     this.onClickEdit = this.onClickEdit.bind(this);
   }
 
+  onClickDeliveryType = type => {
+    console.log("Type====", type);
+    AlertTemplateResourceStore.setSelectedContentType(type);
+  };
+
   setCollapseId(id) {
     this.setState({
       collapseID: id
@@ -78,7 +83,7 @@ class ResultTable extends React.Component {
     });
     const edit = editMode;
     edit[activeTab] = false;
-    //data.state = undefined;
+    // data.state = undefined;
     this.setState({
       editMode: { ...edit }
     });
@@ -89,8 +94,16 @@ class ResultTable extends React.Component {
     AlertTemplateResourceStore.resetStore();
   };
 
-  expandAccordian = alertTypeResource => {
+  expandAccordian = (e, alertTypeResource, deliveryType) => {
+    e.stopPropagation();
     const { collapseID, edited } = this.state;
+    // const deliveryTypes = alertTypeResource.deliveryTypes
+    const deliveryContentMapping = {
+      EMAIL: ["EMAIL_BODY", "EMAIL_SUBJECT"],
+      SMS: ["SMS_BODY"],
+      PUSH: ["PUSH_BODY"]
+    };
+    console.log("DelieryType", deliveryType);
     if (Object.values(edited).includes(true)) {
       this.setState({ confirmModalShow: true });
     } else {
@@ -98,7 +111,17 @@ class ResultTable extends React.Component {
       if (collapseID === alertTypeResource.alertTypeId) {
         this.setCollapseId("");
       } else {
-        AlertTemplateService.loadAlertTemplatesResources(alertTypeResource);
+        let contentType;
+        if (deliveryType) {
+          contentType = deliveryContentMapping[deliveryType][0];
+        } else {
+          contentType =
+            deliveryContentMapping[alertTypeResource.deliveryTypes[0]][0];
+        }
+        AlertTemplateService.loadAlertTemplatesResources(
+          alertTypeResource,
+          contentType
+        );
         this.setCollapseId(alertTypeResource.alertTypeId);
         this.setState({ editMode: {}, edited: {} });
       }
@@ -205,7 +228,7 @@ class ResultTable extends React.Component {
     data.changedContent = addSpans(data.changedContent);
     // const regex = /\${\w*\}/g;
 
-    let content = data.changedContent;
+    const content = data.changedContent;
     const dynamicError = [];
     const regex = /\${[^$]*?\}/g;
     const dynamicVariables = innerTextOfSpans(data.changedContent).match(regex);
@@ -332,7 +355,7 @@ class ResultTable extends React.Component {
     return (
       <React.Fragment>
         <div className="row-margin">
-          <div className="flex" onClick={() => this.expandAccordian(obj)}>
+          <div className="flex" onClick={(e) => this.expandAccordian(e, obj)}>
             <div style={{ width: "30px" }}>
               <span
                 className={
@@ -349,14 +372,29 @@ class ResultTable extends React.Component {
                 <span
                   className="glyphicon glyphicon-envelope icon-margin"
                   style={obj.deliveryTypes.includes("EMAIL") ? {} : hidden}
+                  onClick={
+                    obj.deliveryTypes.includes("EMAIL")
+                      ? e => this.expandAccordian(e, obj, "EMAIL")
+                      : null
+                  }
                 />
                 <span
                   className="glyphicon glyphicon-comment icon-margin"
                   style={obj.deliveryTypes.includes("SMS") ? {} : hidden}
+                  onClick={
+                    obj.deliveryTypes.includes("SMS")
+                      ? e => this.expandAccordian(e, obj, "SMS")
+                      : null
+                  }
                 />
                 <span
                   className="glyphicon glyphicon-bell icon-margin"
                   style={obj.deliveryTypes.includes("PUSH") ? {} : hidden}
+                  onClick={
+                    obj.deliveryTypes.includes("PUSH")
+                      ? e => this.expandAccordian(e, obj, "PUSH")
+                      : null
+                  }
                 />
               </div>
               <div className="col-xs-4">{obj.description}</div>

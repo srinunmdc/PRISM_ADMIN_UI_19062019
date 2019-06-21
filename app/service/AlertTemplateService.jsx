@@ -18,7 +18,7 @@ import LoaderResourceStore from "../store/LoaderStore";
 };*/
 
 export default class AlertTemplateService {
-  static loadAlertTemplatesResources(alertTypeResource) {
+  static loadAlertTemplatesResources(alertTypeResource, contentType) {
     LoaderResourceStore.loadingStart();
     AlertManagementService.getTemplates(alertTypeResource)
       .then(response => {
@@ -26,14 +26,17 @@ export default class AlertTemplateService {
         LoaderResourceStore.loadingComplete();
         AlertTemplateResourceStore.setTemplates(
           JSON.parse(response.data.alertTemplates),
-          isLoaded
+          isLoaded,
+          contentType
         );
       })
       .catch(response => {
         console.log("Exception while fetching templates"+response);
         // for local testing only uncomment above _data variable before using below code.
-        LoaderResourceStore.loadingComplete();
-       // AlertTemplateResourceStore.setTemplates(JSON.parse(_data.templates));
+        // LoaderResourceStore.loadingComplete();
+        // AlertTemplateResourceStore.setTemplates(JSON.parse(_data.templates), isLoaded,
+        //   contentType
+        // );
         // AlertTemplateResourceStore.setDynamicVariables(
         //   JSON.parse(_data.dynamicVariables)
         // );
