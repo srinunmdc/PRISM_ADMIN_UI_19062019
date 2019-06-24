@@ -234,3 +234,12 @@ ul, ol {
     right: -4px;
     z-index: 1;
 }
+
+.heading-margin-bottom{
+    margin-bottom: 10px;
+}
+
+.heading-margin-top-bottom{
+    margin-top: 10px;
+    margin-bottom: 10px; 
+}

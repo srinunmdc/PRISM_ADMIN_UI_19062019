@@ -33,41 +33,40 @@ class EditorTabs extends React.Component {
       wrongDynamicVariables
     } = this.props;
     const activeTab = alertTemplateStore.templateContentTypes.selected;
+    console.log(activeTab);
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
     return (
       <React.Fragment>
-        <div className="editor-wrapper">
-          <div className="flex">
-            <div className="editor-left-wrapper">
-              {alertTemplateStore.alertTemplates.map(element => {
-                if (element.templateContentType !== activeTab) return undefined;
-                return (
-                  <Editor
-                    data={element}
-                    editMode={editMode}
-                    onChangeSource={onChangeSource}
-                    onChange={onChange}
-                    activeTab={activeTab}
-                    edited={edited}
-                    onPublish={onPublish}
-                    onReject={onReject}
-                    onDraft={onDraft}
-                    onCancel={onCancel}
-                    onPreview={onPreview}
-                    onClickEdit={onClickEdit}
-                    showAlert={showAlert}
-                    closeAlert={closeAlert}
-                    wrongDynamicVariables={wrongDynamicVariables}
-                  />
-                );
-              })}
-            </div>
-            <div className="editor-right-wrapper">
-              {alertTemplateStore.alertTemplates.map(element => {
-                if (element.templateContentType !== activeTab) return undefined;
-                return <EditorPreview data={element} />;
-              })}
-            </div>
+        <div className="flex editor-wrapper">
+          <div className="editor-left-wrapper">
+            {alertTemplateStore.alertTemplates.map(element => {
+              if (element.templateContentType !== activeTab) return undefined;
+              return (
+                <Editor
+                  data={element}
+                  editMode={editMode}
+                  onChangeSource={onChangeSource}
+                  onChange={onChange}
+                  activeTab={activeTab}
+                  edited={edited}
+                  onPublish={onPublish}
+                  onReject={onReject}
+                  onDraft={onDraft}
+                  onCancel={onCancel}
+                  onPreview={onPreview}
+                  onClickEdit={onClickEdit}
+                  showAlert={showAlert}
+                  closeAlert={closeAlert}
+                  wrongDynamicVariables={wrongDynamicVariables}
+                />
+              );
+            })}
+          </div>
+          <div className="editor-right-wrapper">
+            {alertTemplateStore.alertTemplates.map(element => {
+              if (element.templateContentType !== activeTab) return undefined;
+              return <EditorPreview data={element} />;
+            })}
           </div>
         </div>
         <div className="row button-wrapper">
