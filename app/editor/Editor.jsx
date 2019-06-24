@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { inject } from "mobx-react";
 import CKEditor from "./NewCKEditor";
-import replaceDynamicVariable from "../util/replaceDynamicVariable";
+import Subject from "./Subject";
 
 import Alert from "../Alert";
 
@@ -26,6 +26,7 @@ class Editor extends React.Component {
       SMS_BODY: "Edit Sms",
       PUSH_BODY: "Edit Push"
     };
+    const height = activeTab === "EMAIL_BODY" ? "88px" : "203px";
     const commonRemove =
       "PasteText,PasteFromWord,Indent,Outdent,Scayt,Link,Unlink,Anchor,Image,Table,HorizontalRule,SpecialChar,Maximize,Strike,RemoveFormat,NumberedList,BulletedList,Blockquote,Styles,About,Subscript,Superscript";
     let extra = "";
@@ -60,7 +61,15 @@ class Editor extends React.Component {
           </div>
         </div>
         <div className="row-xs-11">
-          <div style={{ minHeight: "278px" }}>
+          <div style={{ minHeight: "203px" }}>
+            {activeTab === "EMAIL_BODY" && (
+              <Subject
+                onChangeSource={onChangeSource}
+                onChange={onChange}
+                data={data}
+                finalRemove={finalRemove}
+              />
+            )}
             <CKEditor
               activeClass="p10"
               content={data.changedContent}
@@ -70,7 +79,7 @@ class Editor extends React.Component {
               }}
               config={{
                 language: data.locale,
-                height: "203px",
+                height,
                 removePlugins: "resize,elementspath",
                 toolbarCanCollapse: true,
                 allowedContent: true,
