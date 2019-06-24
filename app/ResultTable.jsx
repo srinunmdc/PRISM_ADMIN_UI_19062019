@@ -34,7 +34,6 @@ class ResultTable extends React.Component {
   }
 
   onClickDeliveryType = type => {
-    console.log("Type====", type);
     AlertTemplateResourceStore.setSelectedContentType(type);
   };
 
@@ -103,7 +102,6 @@ class ResultTable extends React.Component {
       SMS: ["SMS_BODY"],
       PUSH: ["PUSH_BODY"]
     };
-    console.log("DelieryType", deliveryType);
     if (Object.values(edited).includes(true)) {
       this.setState({ confirmModalShow: true });
     } else {
@@ -352,10 +350,13 @@ class ResultTable extends React.Component {
     } = this.state;
     const hidden = { opacity: 0.5 };
     const showIcon = hoverIndex === index ? "" : "invisible";
+    const { alertTemplateStore } = this.props;
+    const activeChannel = alertTemplateStore.templateContentTypes.selected;
+
     return (
       <React.Fragment>
         <div className="row-margin">
-          <div className="flex" onClick={(e) => this.expandAccordian(e, obj)}>
+          <div className="flex" onClick={e => this.expandAccordian(e, obj)}>
             <div style={{ width: "30px" }}>
               <span
                 className={
@@ -370,7 +371,11 @@ class ResultTable extends React.Component {
               <div className="col-xs-2">{obj.displayAlertTypeName}</div>
               <div className="col-xs-2">
                 <span
-                  className="glyphicon glyphicon-envelope icon-margin"
+                  className={
+                    collapseID === obj.alertTypeId && activeChannel === "EMAIL_BODY"
+                      ? `glyphicon glyphicon-envelope icon-margin active-channel`
+                      : "glyphicon glyphicon-envelope icon-margin"
+                  }
                   style={obj.deliveryTypes.includes("EMAIL") ? {} : hidden}
                   onClick={
                     obj.deliveryTypes.includes("EMAIL")
@@ -379,7 +384,11 @@ class ResultTable extends React.Component {
                   }
                 />
                 <span
-                  className="glyphicon glyphicon-comment icon-margin"
+                  className={
+                    collapseID === obj.alertTypeId && activeChannel === "SMS_BODY"
+                      ? `glyphicon glyphicon-comment icon-margin                    `
+                      : "glyphicon glyphicon-comment icon-margin"
+                  }
                   style={obj.deliveryTypes.includes("SMS") ? {} : hidden}
                   onClick={
                     obj.deliveryTypes.includes("SMS")
@@ -388,7 +397,11 @@ class ResultTable extends React.Component {
                   }
                 />
                 <span
-                  className="glyphicon glyphicon-bell icon-margin"
+                  className={
+                    collapseID === obj.alertTypeId && activeChannel === "PUSH_BODY"
+                      ? `glyphicon glyphicon-bell icon-margin active-channel`
+                      : "glyphicon glyphicon-bell icon-margin"
+                  }
                   style={obj.deliveryTypes.includes("PUSH") ? {} : hidden}
                   onClick={
                     obj.deliveryTypes.includes("PUSH")

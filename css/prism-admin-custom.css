@@ -222,3 +222,15 @@ ul, ol {
     padding: 5px 0px; 
 }
 /**/
+
+.active-channel::after{
+    content: ' ';
+    height: 3px;
+    display: block;
+    background: #666;
+    position: absolute;
+    bottom: -14px;
+    left: -4px;
+    right: -4px;
+    z-index: 1;
+}

@@ -31,15 +31,18 @@ export default class AlertTemplateService {
         );
       })
       .catch(response => {
-        console.log("Exception while fetching templates"+response);
+        console.log("Exception while fetching templates" + response);
+        const isLoaded = false;
         // for local testing only uncomment above _data variable before using below code.
-        // LoaderResourceStore.loadingComplete();
-        // AlertTemplateResourceStore.setTemplates(JSON.parse(_data.templates), isLoaded,
-        //   contentType
-        // );
-        // AlertTemplateResourceStore.setDynamicVariables(
-        //   JSON.parse(_data.dynamicVariables)
-        // );
+        LoaderResourceStore.loadingComplete();
+        AlertTemplateResourceStore.setTemplates(
+          JSON.parse(_data.templates),
+          isLoaded,
+          contentType
+        );
+        AlertTemplateResourceStore.setDynamicVariables(
+          JSON.parse(_data.dynamicVariables)
+        );
       });
   }
 
