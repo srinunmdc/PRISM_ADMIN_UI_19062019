@@ -21,6 +21,11 @@ class Editor extends React.Component {
       closeAlert,
       wrongDynamicVariables
     } = this.props;
+    const tabLabels = {
+      EMAIL_BODY: "Edit Email",
+      SMS_BODY: "Edit Sms",
+      PUSH_BODY: "Edit Push"
+    };
     const commonRemove =
       "PasteText,PasteFromWord,Indent,Outdent,Scayt,Link,Unlink,Anchor,Image,Table,HorizontalRule,SpecialChar,Maximize,Strike,RemoveFormat,NumberedList,BulletedList,Blockquote,Styles,About,Subscript,Superscript";
     let extra = "";
@@ -38,12 +43,13 @@ class Editor extends React.Component {
         ? "Unsupported Keywords "
         : "Unsupported Keyword";
     return (
-      <div className="vertical-flex">
+      <div className="col">
+        <div className="row-xs-1 preview-header">{tabLabels[activeTab]}</div>
         <div
           className="col-md-12 col-sm-12 col-xs-12 alert-wrapper"
           style={showAlertClass}
         >
-          <div className="col-md-12 col-sm-12 col-xs-12">
+          <div className="row-xs-1">
             <Alert
               alertClass="danger"
               highlightedMessage={highlightedMessage}
@@ -53,11 +59,8 @@ class Editor extends React.Component {
             />
           </div>
         </div>
-        <div className="col-md-12 col-sm-12 col-xs-12 editor-control-wrapper">
-          <div
-            className="col-md-12 col-sm-12 col-xs-12"
-            style={{ minHeight: "304.67px" }}
-          >
+        <div className="row-xs-11">
+          <div style={{ minHeight: "278px" }}>
             <CKEditor
               activeClass="p10"
               content={data.changedContent}
@@ -67,8 +70,8 @@ class Editor extends React.Component {
               }}
               config={{
                 language: data.locale,
-                // height,
-                removePlugins: "resize",
+                height: "203px",
+                removePlugins: "resize,elementspath",
                 toolbarCanCollapse: true,
                 allowedContent: true,
                 disableAutoInline: true,
