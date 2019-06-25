@@ -16,7 +16,6 @@ class EditorTabs extends React.Component {
 
   render() {
     const {
-      editMode,
       edited,
       alertTemplateStore,
       onChange,
@@ -33,18 +32,23 @@ class EditorTabs extends React.Component {
       wrongDynamicVariables
     } = this.props;
     const activeTab = alertTemplateStore.templateContentTypes.selected;
-    console.log(activeTab);
+    let data = null;
+    alertTemplateStore.alertTemplates.forEach(element => {
+      if (element.templateContentType === activeTab) data = element;
+    });
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
+    if (!data) {
+      return null;
+    }
     return (
       <div className="editor-button-wrapper">
         <div className="flex editor-wrapper">
-          <div className="editor-left-wrapper" style={{minHeight: "361px"}}>
+          <div className="editor-left-wrapper" style={{ minHeight: "361px" }}>
             {alertTemplateStore.alertTemplates.map(element => {
               if (element.templateContentType !== activeTab) return undefined;
               return (
                 <Editor
-                  data={element}
-                  editMode={editMode}
+                  data={data}
                   onChangeSource={onChangeSource}
                   onChange={onChange}
                   activeTab={activeTab}
@@ -65,16 +69,15 @@ class EditorTabs extends React.Component {
           <div className="editor-right-wrapper">
             {alertTemplateStore.alertTemplates.map(element => {
               if (element.templateContentType !== activeTab) return undefined;
-              return <EditorPreview data={element} activeTab={activeTab} />;
+              return <EditorPreview data={data} activeTab={activeTab} />;
             })}
           </div>
         </div>
         <div className="row button-wrapper">
           {(role === "publish" || role === "edit") && (
             <EditorControl
-              data={" "}
+              data={data}
               edited={edited}
-              editMode={editMode}
               activeTab={activeTab}
               onPublish={onPublish}
               onReject={onReject}
@@ -92,7 +95,6 @@ class EditorTabs extends React.Component {
 
 EditorTabs.propTypes = {
   alertTemplateStore: PropTypes.object.isRequired,
-  editMode: PropTypes.object.isRequired,
   edited: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onChangeSource: PropTypes.func.isRequired,
