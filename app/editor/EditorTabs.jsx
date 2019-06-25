@@ -36,9 +36,9 @@ class EditorTabs extends React.Component {
     console.log(activeTab);
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
     return (
-      <React.Fragment>
+      <div className="editor-button-wrapper">
         <div className="flex editor-wrapper">
-          <div className="editor-left-wrapper">
+          <div className="editor-left-wrapper" style={{minHeight: "361px"}}>
             {alertTemplateStore.alertTemplates.map(element => {
               if (element.templateContentType !== activeTab) return undefined;
               return (
@@ -65,7 +65,7 @@ class EditorTabs extends React.Component {
           <div className="editor-right-wrapper">
             {alertTemplateStore.alertTemplates.map(element => {
               if (element.templateContentType !== activeTab) return undefined;
-              return <EditorPreview data={element} />;
+              return <EditorPreview data={element} activeTab={activeTab} />;
             })}
           </div>
         </div>
@@ -85,7 +85,7 @@ class EditorTabs extends React.Component {
             />
           )}
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

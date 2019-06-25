@@ -199,6 +199,7 @@ ul, ol {
 .no-padding{
     padding: 0px;
 }
+/*New Table end*/
 
 .flex{
     display: flex;
@@ -206,10 +207,11 @@ ul, ol {
 }
 
 .editor-wrapper{
-    margin: 20px;
+    margin-bottom: 30px;
 }
 .editor-left-wrapper{
     flex: 1;
+    margin-right: 20px; 
 }
 
 .editor-right-wrapper{
@@ -217,11 +219,13 @@ ul, ol {
 }
 
 .button-wrapper{
-    margin: 20px;
+    margin: 0px;
     border-top: 3px solid #CCC;
     padding: 5px 0px; 
 }
-/**/
+.editor-button-wrapper{
+    margin: 30px;
+}
 
 .active-channel::after{
     content: ' ';
