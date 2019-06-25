@@ -21,7 +21,6 @@ class ResultTable extends React.Component {
       sortOrder: "asc",
       sortKey: "",
       edited: {},
-      editMode: {},
       confirmModalShow: false,
       confirmRejectModalShow: false,
       showAlert: {}, // have to make showAlert keys dynamic by taking value from templateContentTypes in alertTemplateSore
@@ -30,7 +29,6 @@ class ResultTable extends React.Component {
     };
     this.sortFields = this.sortFields.bind(this);
     this.setCollapseId = this.setCollapseId.bind(this);
-    this.onClickEdit = this.onClickEdit.bind(this);
   }
 
   onClickDeliveryType = type => {
@@ -48,7 +46,6 @@ class ResultTable extends React.Component {
       {
         confirmModalShow: false,
         edited: {},
-        editMode: {},
         showAlert: {},
         wrongDynamicVariables: {}
       },
@@ -72,19 +69,12 @@ class ResultTable extends React.Component {
   continueRejectEditing = () => {
     this.setState({ confirmRejectModalShow: false });
     const { alertTemplateStore } = this.props;
-    const { editMode } = this.state;
     const activeTab = alertTemplateStore.templateContentTypes.selected;
     let data;
     alertTemplateStore.alertTemplates.forEach(element => {
       if (element.templateContentType === activeTab) {
         data = element;
       }
-    });
-    const edit = editMode;
-    edit[activeTab] = false;
-    // data.state = undefined;
-    this.setState({
-      editMode: { ...edit }
     });
     AlertTemplateService.deleteTemplate(data);
   };
@@ -121,7 +111,7 @@ class ResultTable extends React.Component {
           contentType
         );
         this.setCollapseId(alertTypeResource.alertTypeId);
-        this.setState({ editMode: {}, edited: {} });
+        this.setState({ edited: {} });
       }
     }
 
@@ -261,31 +251,9 @@ class ResultTable extends React.Component {
     }
   };
 
-  onClickEdit = () => {
-    const { editMode } = this.state;
-    const { alertTemplateStore } = this.props;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
-    const edit = editMode;
-    edit[activeTab] = true;
-    this.setState({
-      editMode: { ...edit }
-    });
-  };
-
-  onPreview = () => {
-    const { alertTemplateStore } = this.props;
-    const { editMode } = this.state;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
-    const edit = editMode;
-    edit[activeTab] = false;
-    this.setState({
-      editMode: { ...edit }
-    });
-  };
-
   onPublish = () => {
     const { alertTemplateStore } = this.props;
-    const { edited, editMode } = this.state;
+    const { edited } = this.state;
     const activeTab = alertTemplateStore.templateContentTypes.selected;
     let data;
     alertTemplateStore.alertTemplates.forEach(element => {
@@ -295,8 +263,7 @@ class ResultTable extends React.Component {
     });
     // data.state = "PUBLISHED";
     this.setState({
-      edited: { ...edited, [activeTab]: false },
-      editMode: { ...editMode, [activeTab]: false }
+      edited: { ...edited, [activeTab]: false }
     });
     AlertTemplateService.publishTemplate(data);
     // data.state = undefined;
@@ -304,7 +271,7 @@ class ResultTable extends React.Component {
 
   onCancel = () => {
     const { alertTemplateStore } = this.props;
-    const { editMode, edited, showAlert } = this.state;
+    const { edited, showAlert } = this.state;
     const activeTab = alertTemplateStore.templateContentTypes.selected;
     let data;
     alertTemplateStore.alertTemplates.forEach(element => {
@@ -313,11 +280,8 @@ class ResultTable extends React.Component {
       }
     });
     data.state = undefined;
-    const edit = editMode;
-    edit[activeTab] = false;
     this.setState({
       edited: { ...edited, [activeTab]: false },
-      editMode: { ...edit },
       showAlert: { ...showAlert, [activeTab]: false },
       wrongDynamicVariables: {}
     });
@@ -341,7 +305,6 @@ class ResultTable extends React.Component {
   renderResultRow = (obj, accordianEvenOdd, index) => {
     const {
       collapseID,
-      editMode,
       edited,
       showAlert,
       hoverIndex,
@@ -429,7 +392,6 @@ class ResultTable extends React.Component {
                   className="accordian-border"
                 >
                   <EditorTabs
-                    editMode={editMode}
                     edited={edited}
                     onChangeSource={this.onChangeSource}
                     onChange={this.onChange}

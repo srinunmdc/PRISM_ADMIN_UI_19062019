@@ -12,7 +12,6 @@ class Editor extends React.Component {
   render() {
     const {
       data,
-      editMode,
       onChangeSource,
       onChange,
       activeTab,
@@ -101,7 +100,6 @@ class Editor extends React.Component {
 
 Editor.propTypes = {
   data: PropTypes.object.isRequired,
-  editMode: PropTypes.bool.isRequired,
   onChangeSource: PropTypes.func.isRequired
 };
 

@@ -8,17 +8,18 @@ class EditorConrol extends React.Component {
     const {
       data,
       edited,
-      editMode,
       activeTab,
       onPublish,
       onReject,
       onDraft,
       onCancel,
-      onPreview,
-      onClickEdit,
       alertPermissionStore
     } = this.props;
+    // Here the edited state means that the data has changed by using ckeditor
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
+    if (role === "view") {
+      return null;
+    }
     return (
       <div className="col-md-12 col-sm-12 col-xs-12 button-panel">
         {role === "publish" &&
@@ -71,27 +72,6 @@ class EditorConrol extends React.Component {
             </button>
           </div>
         ) : null}
-        {editMode[activeTab] ? (
-          <div>
-            <button
-              type="button"
-              className="btn sm btn-primary"
-              onClick={onPreview}
-            >
-              Preview
-            </button>
-          </div>
-        ) : (
-          <div>
-            <button
-              type="button"
-              className="btn sm btn-primary"
-              onClick={onClickEdit}
-            >
-              Edit
-            </button>
-          </div>
-        )}
       </div>
     );
   }
@@ -101,13 +81,10 @@ EditorConrol.propTypes = {
   data: PropTypes.object.isRequired,
   edited: PropTypes.bool.isRequired,
   activeTab: PropTypes.string.isRequired,
-  editMode: PropTypes.bool.isRequired,
   onPublish: PropTypes.func.isRequired,
   onReject: PropTypes.func.isRequired,
   onDraft: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  onPreview: PropTypes.func.isRequired,
-  onClickEdit: PropTypes.func.isRequired
+  onCancel: PropTypes.func.isRequired
 };
 
 export default EditorConrol;
