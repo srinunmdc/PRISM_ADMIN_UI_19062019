@@ -356,7 +356,11 @@ class ResultTable extends React.Component {
     return (
       <React.Fragment>
         <div className="row-margin">
-          <div className="flex" onClick={e => this.expandAccordian(e, obj)}>
+          <div
+            className="flex"
+            style={{ cursor: "pointer" }}
+            onClick={e => this.expandAccordian(e, obj)}
+          >
             <div style={{ width: "30px" }}>
               <span
                 className={
@@ -372,7 +376,8 @@ class ResultTable extends React.Component {
               <div className="col-xs-2">
                 <span
                   className={
-                    collapseID === obj.alertTypeId && activeChannel === "EMAIL_BODY"
+                    collapseID === obj.alertTypeId &&
+                    activeChannel === "EMAIL_BODY"
                       ? `glyphicon glyphicon-envelope icon-margin active-channel`
                       : "glyphicon glyphicon-envelope icon-margin"
                   }
@@ -398,7 +403,8 @@ class ResultTable extends React.Component {
                 />
                 <span
                   className={
-                    collapseID === obj.alertTypeId && activeChannel === "PUSH_BODY"
+                    collapseID === obj.alertTypeId &&
+                    activeChannel === "PUSH_BODY"
                       ? `glyphicon glyphicon-bell icon-margin active-channel`
                       : "glyphicon glyphicon-bell icon-margin"
                   }
@@ -410,9 +416,9 @@ class ResultTable extends React.Component {
                   }
                 />
               </div>
-              <div className="col-xs-4">{obj.description}</div>
+              <div className="text-truncate col-xs-4">{obj.description}</div>
               <div className="col-xs-2">{obj.platform}</div>
-              <div className="col-xs-2">{obj.vendor}</div>
+              <div className="text-truncate col-xs-2">{obj.vendor}</div>
             </div>
           </div>
           {collapseID === obj.alertTypeId && (

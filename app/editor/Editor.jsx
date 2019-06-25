@@ -26,7 +26,7 @@ class Editor extends React.Component {
       SMS_BODY: "Edit Sms",
       PUSH_BODY: "Edit Push"
     };
-    const height = activeTab === "EMAIL_BODY" ? "88px" : "203px";
+    const height = "262px";
     const commonRemove =
       "PasteText,PasteFromWord,Indent,Outdent,Scayt,Link,Unlink,Anchor,Image,Table,HorizontalRule,SpecialChar,Maximize,Strike,RemoveFormat,NumberedList,BulletedList,Blockquote,Styles,About,Subscript,Superscript";
     let extra = "";
@@ -66,9 +66,13 @@ class Editor extends React.Component {
               <Subject
                 onChangeSource={onChangeSource}
                 onChange={onChange}
+                height="88px"
                 data={data}
                 finalRemove={finalRemove}
               />
+            )}
+            {activeTab === "EMAIL_BODY" && (
+              <div className="heading-margin-top-bottom">Email Body</div>
             )}
             <CKEditor
               activeClass="p10"
