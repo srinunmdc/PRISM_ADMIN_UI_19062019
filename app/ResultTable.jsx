@@ -352,7 +352,7 @@ class ResultTable extends React.Component {
     const showIcon = hoverIndex === index ? "" : "invisible";
     const { alertTemplateStore } = this.props;
     const activeChannel = alertTemplateStore.templateContentTypes.selected;
-
+    console.log("active channel", activeChannel)
     return (
       <React.Fragment>
         <div className="row-margin">
@@ -390,9 +390,8 @@ class ResultTable extends React.Component {
                 />
                 <span
                   className={
-                    collapseID === obj.alertTypeId &&
-                    activeChannel === "SMS_BODY"
-                      ? `glyphicon glyphicon-comment icon-margin                    `
+                    collapseID === obj.alertTypeId && activeChannel === "SMS_BODY"
+                      ? `glyphicon glyphicon-comment icon-margin active-channel`
                       : "glyphicon glyphicon-comment icon-margin"
                   }
                   style={obj.deliveryTypes.includes("SMS") ? {} : hidden}
