@@ -27,6 +27,8 @@ class EditorTabs extends React.Component {
       onDraft,
       onCancel,
       onPreview,
+      handlePreview,
+      updatePreview,
       onClickEdit,
       showAlert,
       closeAlert,
@@ -90,7 +92,14 @@ class EditorTabs extends React.Component {
           <div className="editor-right-wrapper">
             {alertTemplateStore.alertTemplates.map(element => {
               if (element.templateContentType !== activeTab) return undefined;
-              return <EditorPreview data={data} activeTab={activeTab} />;
+              return (
+                <EditorPreview
+                  data={element}
+                  activeTab={activeTab}
+                  handlePreview={handlePreview}
+                  updatePreview={updatePreview}
+                />
+              );
             })}
           </div>
         </div>
