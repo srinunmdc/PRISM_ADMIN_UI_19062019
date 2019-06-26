@@ -5,6 +5,7 @@ import Editor from "./Editor";
 import EditorControl from "./EditorControl";
 import EditorPreview from "./EditorPreview";
 import AlertTemplateResourceStore from "../store/AlertTemplateStore";
+import Alert from "../Alert";
 
 @inject("alertTemplateStore")
 @inject("alertPermissionStore")
@@ -16,7 +17,6 @@ class EditorTabs extends React.Component {
 
   render() {
     const {
-      editMode,
       edited,
       alertTemplateStore,
       onChange,
@@ -35,17 +35,43 @@ class EditorTabs extends React.Component {
       wrongDynamicVariables
     } = this.props;
     const activeTab = alertTemplateStore.templateContentTypes.selected;
+    let data = null;
+    alertTemplateStore.alertTemplates.forEach(element => {
+      if (element.templateContentType === activeTab) data = element;
+    });
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
+    const showAlertClass = showAlert[activeTab] ? {} : { display: "none" };
+    const UnsupportedKeywords =
+      wrongDynamicVariables[activeTab] &&
+      wrongDynamicVariables[activeTab].join(",  ");
+    const highlightedMessage =
+      wrongDynamicVariables[activeTab] &&
+      wrongDynamicVariables[activeTab].length > 1
+        ? "Unsupported Keywords "
+        : "Unsupported Keyword";
+    if (!data) {
+      return null;
+    }
     return (
       <div className="editor-button-wrapper">
+        <div style={showAlertClass}>
+          <div className="row-xs-1">
+            <Alert
+              alertClass="danger"
+              highlightedMessage={highlightedMessage}
+              detailMessage={UnsupportedKeywords}
+              showCloseIcon
+              handleClose={closeAlert}
+            />
+          </div>
+        </div>
         <div className="flex editor-wrapper">
           <div className="editor-left-wrapper" style={{ minHeight: "361px" }}>
             {alertTemplateStore.alertTemplates.map(element => {
               if (element.templateContentType !== activeTab) return undefined;
               return (
                 <Editor
-                  data={element}
-                  editMode={editMode}
+                  data={data}
                   onChangeSource={onChangeSource}
                   onChange={onChange}
                   activeTab={activeTab}
@@ -80,9 +106,8 @@ class EditorTabs extends React.Component {
         <div className="row button-wrapper">
           {(role === "publish" || role === "edit") && (
             <EditorControl
-              data=" "
+              data={data}
               edited={edited}
-              editMode={editMode}
               activeTab={activeTab}
               onPublish={onPublish}
               onReject={onReject}
@@ -100,7 +125,6 @@ class EditorTabs extends React.Component {
 
 EditorTabs.propTypes = {
   alertTemplateStore: PropTypes.object.isRequired,
-  editMode: PropTypes.object.isRequired,
   edited: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onChangeSource: PropTypes.func.isRequired,

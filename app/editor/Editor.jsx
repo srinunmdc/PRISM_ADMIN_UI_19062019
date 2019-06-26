@@ -12,7 +12,6 @@ class Editor extends React.Component {
   render() {
     const {
       data,
-      editMode,
       onChangeSource,
       onChange,
       activeTab,
@@ -34,32 +33,9 @@ class Editor extends React.Component {
       extra = ",Bold,Italic,Underline,Format";
     }
     const finalRemove = commonRemove + extra;
-    const showAlertClass = showAlert[activeTab] ? {} : { display: "none" };
-    const UnsupportedKeywords =
-      wrongDynamicVariables[activeTab] &&
-      wrongDynamicVariables[activeTab].join(",  ");
-    const highlightedMessage =
-      wrongDynamicVariables[activeTab] &&
-      wrongDynamicVariables[activeTab].length > 1
-        ? "Unsupported Keywords "
-        : "Unsupported Keyword";
     return (
       <div className="col">
         <div className="row-xs-1 preview-header">{tabLabels[activeTab]}</div>
-        <div
-          className="col-md-12 col-sm-12 col-xs-12 alert-wrapper"
-          style={showAlertClass}
-        >
-          <div className="row-xs-1">
-            <Alert
-              alertClass="danger"
-              highlightedMessage={highlightedMessage}
-              detailMessage={UnsupportedKeywords}
-              showCloseIcon
-              handleClose={closeAlert}
-            />
-          </div>
-        </div>
         <div className="row-xs-11">
           <div style={{ minHeight: "203px" }}>
             {activeTab === "EMAIL_BODY" && (
@@ -101,7 +77,6 @@ class Editor extends React.Component {
 
 Editor.propTypes = {
   data: PropTypes.object.isRequired,
-  editMode: PropTypes.bool.isRequired,
   onChangeSource: PropTypes.func.isRequired
 };
 
