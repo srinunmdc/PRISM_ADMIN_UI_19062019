@@ -34,6 +34,11 @@ class EditorTabs extends React.Component {
       closeAlert,
       wrongDynamicVariables
     } = this.props;
+    const tabLabels = {
+      EMAIL_BODY: "Email",
+      SMS_BODY: "Sms",
+      PUSH_BODY: "Push"
+    };
     const activeTab = alertTemplateStore.templateContentTypes.selected;
     let data = null;
     alertTemplateStore.alertTemplates.forEach(element => {
@@ -85,6 +90,7 @@ class EditorTabs extends React.Component {
                   showAlert={showAlert}
                   closeAlert={closeAlert}
                   wrongDynamicVariables={wrongDynamicVariables}
+                  tabLabels={tabLabels}
                 />
               );
             })}
@@ -98,6 +104,7 @@ class EditorTabs extends React.Component {
                   activeTab={activeTab}
                   handlePreview={handlePreview}
                   updatePreview={updatePreview}
+                  tabLabels={tabLabels}
                 />
               );
             })}

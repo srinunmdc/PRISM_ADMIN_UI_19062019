@@ -1447,7 +1447,7 @@ body{
 	background: white;
 }
 .icon-margin{
-	margin-right: 10px;
+	margin-right: 15px;
 }
 .di-checkbox input[type=checkbox]+.lbl.sm::before{
 	margin-left: 0px;

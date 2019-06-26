@@ -32,9 +32,10 @@ const EditorPreview = ({
           }}
         />
       </div>
-      <div className="heading-margin-top-bottom">{`Characters (${
-        data.changedContent.length
-      })`}</div>
+      <div
+        className="subheading-margin-top-bottom"
+        style={{ fontSize: "14px" }}
+      >{`Characters (${data.changedContent.length})`}</div>
     </React.Fragment>
   );
 };

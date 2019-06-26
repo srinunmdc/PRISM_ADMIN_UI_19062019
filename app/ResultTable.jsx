@@ -365,7 +365,7 @@ class ResultTable extends React.Component {
               />
             </div>
             <div className="row table-row">
-              <div className="col-xs-2">{obj.displayAlertTypeName}</div>
+              <div className="col-xs-2">{obj.alertTypeName}</div>
               <div className="col-xs-2">
                 <span
                   className={
