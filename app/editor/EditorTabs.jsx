@@ -27,18 +27,19 @@ class EditorTabs extends React.Component {
       onDraft,
       onCancel,
       onPreview,
+      handlePreview,
+      updatePreview,
       onClickEdit,
       showAlert,
       closeAlert,
       wrongDynamicVariables
     } = this.props;
     const activeTab = alertTemplateStore.templateContentTypes.selected;
-    console.log(activeTab);
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
     return (
       <div className="editor-button-wrapper">
         <div className="flex editor-wrapper">
-          <div className="editor-left-wrapper" style={{minHeight: "361px"}}>
+          <div className="editor-left-wrapper" style={{ minHeight: "361px" }}>
             {alertTemplateStore.alertTemplates.map(element => {
               if (element.templateContentType !== activeTab) return undefined;
               return (
@@ -65,14 +66,21 @@ class EditorTabs extends React.Component {
           <div className="editor-right-wrapper">
             {alertTemplateStore.alertTemplates.map(element => {
               if (element.templateContentType !== activeTab) return undefined;
-              return <EditorPreview data={element} activeTab={activeTab} />;
+              return (
+                <EditorPreview
+                  data={element}
+                  activeTab={activeTab}
+                  handlePreview={handlePreview}
+                  updatePreview={updatePreview}
+                />
+              );
             })}
           </div>
         </div>
         <div className="row button-wrapper">
           {(role === "publish" || role === "edit") && (
             <EditorControl
-              data={" "}
+              data=" "
               edited={edited}
               editMode={editMode}
               activeTab={activeTab}

@@ -26,7 +26,8 @@ class ResultTable extends React.Component {
       confirmRejectModalShow: false,
       showAlert: {}, // have to make showAlert keys dynamic by taking value from templateContentTypes in alertTemplateSore
       hoverIndex: null,
-      wrongDynamicVariables: {} // have to make wrongDynamicVariables keys dynamic by taking value from templateContentTypes in alertTemplateSore
+      wrongDynamicVariables: {}, // have to make wrongDynamicVariables keys dynamic by taking value from templateContentTypes in alertTemplateSore
+      updatePreview: 0
     };
     this.sortFields = this.sortFields.bind(this);
     this.setCollapseId = this.setCollapseId.bind(this);
@@ -137,9 +138,9 @@ class ResultTable extends React.Component {
         data = element;
       }
     });
-    const { edited } = this.state;
+    const { edited, updatePreview } = this.state;
     this.setState({
-      edited: { ...edited, [activeTab]: true }
+      edited: { ...edited, [activeTab]: true, updatePreview: updatePreview + 1 }
     });
     if (data.templateContentType === "EMAIL_BODY") {
       data.changedContent = evt.editor.getData();
@@ -283,6 +284,20 @@ class ResultTable extends React.Component {
     });
   };
 
+  handlePreview = () => {
+    const { alertTemplateStore } = this.props;
+    const activeTab = alertTemplateStore.templateContentTypes.selected;
+    let data;
+    alertTemplateStore.alertTemplates.forEach(element => {
+      if (element.templateContentType === activeTab) {
+        data = element;
+      }
+    });
+    data.previewContent = data.changedContent;
+    const { updatePreview } = this.state;
+    this.setState({ updatePreview: updatePreview + 1 });
+  };
+
   onPublish = () => {
     const { alertTemplateStore } = this.props;
     const { edited, editMode } = this.state;
@@ -346,13 +361,13 @@ class ResultTable extends React.Component {
       showAlert,
       hoverIndex,
       wrongDynamicVariables,
-      rejectAlert
+      rejectAlert,
+      updatePreview
     } = this.state;
     const hidden = { opacity: 0.5 };
     const showIcon = hoverIndex === index ? "" : "invisible";
     const { alertTemplateStore } = this.props;
     const activeChannel = alertTemplateStore.templateContentTypes.selected;
-    console.log("active channel", activeChannel)
     return (
       <React.Fragment>
         <div className="row-margin">
@@ -439,6 +454,8 @@ class ResultTable extends React.Component {
                     onDraft={this.onDraft}
                     onCancel={this.onCancel}
                     onPreview={this.onPreview}
+                    handlePreview={this.handlePreview}
+                    updatePreview={updatePreview}
                     onClickEdit={this.onClickEdit}
                     showAlert={showAlert}
                     closeAlert={this.closeAlert}

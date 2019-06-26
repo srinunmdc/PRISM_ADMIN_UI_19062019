@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import replaceDynamicVariable from "../util/replaceDynamicVariable";
 
-const EditorPreview = ({ data, activeTab }) => {
+const EditorPreview = ({ data, activeTab, handlePreview, updatePreview }) => {
   const height = activeTab === "EMAIL_BODY" ? "535px" : "328px";
   const previewDivStyle = {
     border: "1px solid #d1d1d1",
@@ -13,14 +13,15 @@ const EditorPreview = ({ data, activeTab }) => {
   return (
     <React.Fragment>
       <div className="preview-header">
-        Preview<div className="glyphicon glyphicon-repeat">Update</div>
+        <span>Preview</span>
+        <div className="glyphicon glyphicon-repeat preview-update" onClick={handlePreview}>Update</div>
       </div>
       <div className="preview-wrapper">
         <div
           style={previewDivStyle}
           dangerouslySetInnerHTML={{
             __html: replaceDynamicVariable(
-              data.changedContent,
+              data.previewContent,
               data.variableMap
             )
           }}
@@ -32,7 +33,8 @@ const EditorPreview = ({ data, activeTab }) => {
 
 EditorPreview.propTypes = {
   data: PropTypes.object.isRequired,
-  activeTab: PropTypes.string.isRequired
+  activeTab: PropTypes.string.isRequired,
+  handlePreview: PropTypes.func.isRequired
 };
 
 export default EditorPreview;

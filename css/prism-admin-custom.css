@@ -247,3 +247,7 @@ ul, ol {
     margin-top: 10px;
     margin-bottom: 10px; 
 }
+
+.preview-update {
+    cursor: pointer;
+}
