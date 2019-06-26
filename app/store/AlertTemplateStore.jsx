@@ -1,5 +1,5 @@
-"use strict";
 import { observable, action, configure, toJS } from "mobx";
+
 configure({ enforceActions: "observed" });
 class AlertTemplateStore {
   @observable alertTemplates = [];
@@ -16,7 +16,7 @@ class AlertTemplateStore {
       // let finalData = this.processData(JSON.parse(_data.alertTypes).alertTypes);
       this.alertTemplates = alertTemplates;
 
-      let contentTypes = this.loadContentTypes(alertTemplates);
+      const contentTypes = this.loadContentTypes(alertTemplates);
       if (isLoaded) {
         this.templateContentTypes.options = contentTypes;
       } else {
@@ -28,7 +28,6 @@ class AlertTemplateStore {
     }
   };
 
-
   @action
   resetStore = () => {
     this.alertTemplates = [];
@@ -37,7 +36,7 @@ class AlertTemplateStore {
   };
 
   loadContentTypes = alertTemplates => {
-    let types = alertTemplates.map(obj => obj.templateContentType);
+    const types = alertTemplates.map(obj => obj.templateContentType);
     return types;
   };
 
@@ -48,9 +47,19 @@ class AlertTemplateStore {
 
   processData = data => {
     return data.map(item => {
-      item.templateContent = item.templateContent.replace(/(\<\/span\>)/g,"</span>&zwnj;")
-      item.templateContent = item.templateContent.replace(/(\<span)/g,"&zwnj;<span")
-      return { ...item, changedContent: item.templateContent };
+      item.templateContent = item.templateContent.replace(
+        /(\<\/span\>)/g,
+        "</span>&zwnj;"
+      );
+      item.templateContent = item.templateContent.replace(
+        /(\<span)/g,
+        "&zwnj;<span"
+      );
+      return {
+        ...item,
+        changedContent: item.templateContent,
+        previewContent: item.templateContent
+      };
     });
   };
 }
