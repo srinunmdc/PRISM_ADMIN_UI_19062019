@@ -86,6 +86,7 @@ class ResultTable extends React.Component {
 
   expandAccordian = (e, alertTypeResource, deliveryType) => {
     e.stopPropagation();
+    const onClickChannel = !!deliveryType;
     const { collapseID, edited } = this.state;
     // const deliveryTypes = alertTypeResource.deliveryTypes
     const deliveryContentMapping = {
@@ -93,27 +94,42 @@ class ResultTable extends React.Component {
       SMS: ["SMS_BODY"],
       PUSH: ["PUSH_BODY"]
     };
-    if (Object.values(edited).includes(true)) {
-      this.setState({ confirmModalShow: true });
-    } else {
-      this.resetTemplateStore();
-      if (collapseID === alertTypeResource.alertTypeId) {
-        this.setCollapseId("");
+    if (!onClickChannel) {
+      if (Object.values(edited).includes(true)) {
+        this.setState({ confirmModalShow: true });
       } else {
-        let contentType;
-        if (deliveryType) {
-          contentType = deliveryContentMapping[deliveryType][0];
+        this.resetTemplateStore();
+        if (collapseID === alertTypeResource.alertTypeId) {
+          this.setCollapseId("");
         } else {
-          contentType =
-            deliveryContentMapping[alertTypeResource.deliveryTypes[0]][0];
+          let contentType;
+          if (deliveryType) {
+            contentType = deliveryContentMapping[deliveryType][0];
+          } else {
+            contentType =
+              deliveryContentMapping[alertTypeResource.deliveryTypes[0]][0];
+          }
+          AlertTemplateService.loadAlertTemplatesResources(
+            alertTypeResource,
+            contentType
+          );
+          this.setCollapseId(alertTypeResource.alertTypeId);
+          this.setState({ edited: {} });
         }
+      }
+    } else {
+      if (collapseID === "") {
         AlertTemplateService.loadAlertTemplatesResources(
           alertTypeResource,
-          contentType
+          deliveryContentMapping[deliveryType][0]
         );
-        this.setCollapseId(alertTypeResource.alertTypeId);
-        this.setState({ edited: {} });
+      } else {
+        AlertTemplateResourceStore.setSelectedContentType(
+          deliveryContentMapping[deliveryType][0]
+        );
       }
+      this.setCollapseId(alertTypeResource.alertTypeId);
+      this.setState({ edited: { ...edited } });
     }
 
     // AlertTemplateResourceStore.resetStore();
@@ -328,7 +344,6 @@ class ResultTable extends React.Component {
       updatePreview
     } = this.state;
     const hidden = { opacity: 0.5 };
-    const showIcon = hoverIndex === index ? "" : "invisible";
     const { alertTemplateStore } = this.props;
     const activeChannel = alertTemplateStore.templateContentTypes.selected;
     return (
@@ -368,7 +383,8 @@ class ResultTable extends React.Component {
                 />
                 <span
                   className={
-                    collapseID === obj.alertTypeId && activeChannel === "SMS_BODY"
+                    collapseID === obj.alertTypeId &&
+                    activeChannel === "SMS_BODY"
                       ? `glyphicon glyphicon-comment icon-margin active-channel`
                       : "glyphicon glyphicon-comment icon-margin"
                   }
