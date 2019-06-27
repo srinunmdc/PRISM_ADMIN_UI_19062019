@@ -71,25 +71,27 @@ class EditorTabs extends React.Component {
           </div>
         </div>
         <div className="flex editor-wrapper">
-          <div className="editor-left-wrapper" style={{ minHeight: "361px" }}>
-            <Editor
-              data={data}
-              onChangeSource={onChangeSource}
-              onChange={onChange}
-              activeTab={activeTab}
-              edited={edited}
-              onPublish={onPublish}
-              onReject={onReject}
-              onDraft={onDraft}
-              onCancel={onCancel}
-              onPreview={onPreview}
-              onClickEdit={onClickEdit}
-              showAlert={showAlert}
-              closeAlert={closeAlert}
-              wrongDynamicVariables={wrongDynamicVariables}
-              tabLabels={tabLabels}
-            />
-          </div>
+          {role !== "view" && (
+            <div className="editor-left-wrapper" style={{ minHeight: "361px" }}>
+              <Editor
+                data={data}
+                onChangeSource={onChangeSource}
+                onChange={onChange}
+                activeTab={activeTab}
+                edited={edited}
+                onPublish={onPublish}
+                onReject={onReject}
+                onDraft={onDraft}
+                onCancel={onCancel}
+                onPreview={onPreview}
+                onClickEdit={onClickEdit}
+                showAlert={showAlert}
+                closeAlert={closeAlert}
+                wrongDynamicVariables={wrongDynamicVariables}
+                tabLabels={tabLabels}
+              />
+            </div>
+          )}
           <div className="editor-right-wrapper">
             <EditorPreview
               data={data}
@@ -97,6 +99,7 @@ class EditorTabs extends React.Component {
               handlePreview={handlePreview}
               updatePreview={updatePreview}
               tabLabels={tabLabels}
+              role={role}
             />
           </div>
         </div>

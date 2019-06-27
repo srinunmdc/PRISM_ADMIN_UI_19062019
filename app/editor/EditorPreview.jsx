@@ -2,7 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import replaceDynamicVariable from "../util/replaceDynamicVariable";
 
-const EditorPreview = ({ data, activeTab, handlePreview, updatePreview, tabLabels }) => {
+const EditorPreview = ({
+  data,
+  activeTab,
+  handlePreview,
+  updatePreview,
+  tabLabels,
+  role
+}) => {
   const height = activeTab === "EMAIL_BODY" ? "530px" : "328px";
   const previewDivStyle = {
     border: "1px solid #d1d1d1",
@@ -16,14 +23,16 @@ const EditorPreview = ({ data, activeTab, handlePreview, updatePreview, tabLabel
         <span>
           <b>{`Preview ${tabLabels[activeTab]}`}</b>
         </span>
-        <div
-          className="glyphicon glyphicon-repeat preview-update"
-          onClick={handlePreview}
-        >
-          <span style={{ textDecoration: "underline" }}>
-            <b>Update</b>
-          </span>
-        </div>
+        {role !== "view" && (
+          <div
+            className="glyphicon glyphicon-repeat preview-update"
+            onClick={handlePreview}
+          >
+            <span style={{ textDecoration: "underline" }}>
+              <b>Update</b>
+            </span>
+          </div>
+        )}
       </div>
       <div className="preview-wrapper">
         <div
@@ -44,7 +53,8 @@ EditorPreview.propTypes = {
   data: PropTypes.object.isRequired,
   activeTab: PropTypes.string.isRequired,
   handlePreview: PropTypes.func.isRequired,
-  tabLabels: PropTypes.string.isRequired
+  tabLabels: PropTypes.string.isRequired,
+  role: PropTypes.string.isRequired
 };
 
 export default EditorPreview;
