@@ -20,6 +20,7 @@ class ResultTable extends React.Component {
       collapseID: "",
       sortOrder: "asc",
       sortKey: "",
+      collapsedDeliveryTpe: "",
       edited: {},
       confirmModalShow: false,
       confirmRejectModalShow: false,
@@ -118,20 +119,38 @@ class ResultTable extends React.Component {
         }
       }
     } else {
+      // first time opened load the data
       if (collapseID === "") {
         AlertTemplateService.loadAlertTemplatesResources(
           alertTypeResource,
           deliveryContentMapping[deliveryType]
         );
-      } else {
+        this.setCollapseId(alertTypeResource.alertTypeId);
+      }
+      // if clicked on the same channel type
+      else if (deliveryType === this.state.collapsedDeliveryTpe) {
+        this.resetTemplateStore();
+        if (Object.values(edited).includes(true)) {
+          this.setState({ confirmModalShow: true });
+        }
+        this.setCollapseId("");
+      }
+      // already opened switch the active data
+      else {
         AlertTemplateResourceStore.setSelectedContentType(
           deliveryContentMapping[deliveryType]
         );
+        this.setCollapseId(alertTypeResource.alertTypeId);
       }
-      this.setCollapseId(alertTypeResource.alertTypeId);
       this.setState({ edited: { ...edited } });
     }
-
+    if (collapseID !== "") {
+      this.setState({
+        collapsedDeliveryTpe:
+          deliveryType ||
+          deliveryContentMapping[alertTypeResource.deliveryTypes[0]][0]
+      });
+    }
     // AlertTemplateResourceStore.resetStore();
   };
 
@@ -431,7 +450,7 @@ class ResultTable extends React.Component {
               />
             </div>
             <div className="row table-row">
-              <div className="col-xs-2">{obj.displayAlertTypeName}</div>
+              <div className="col-xs-2">{obj.alertTypeName}</div>
               <div className="col-xs-2">
                 <span
                   className={

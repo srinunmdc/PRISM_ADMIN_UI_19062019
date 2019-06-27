@@ -10,7 +10,7 @@ class tableHead extends React.Component {
   }
 
   sort(column, index) {
-    let ar = this.state.caret;
+    const ar = this.state.caret;
     ar[index] = !this.state.caret[index];
     this.setState({
       caret: ar
@@ -27,7 +27,12 @@ class tableHead extends React.Component {
           {this.props.columns.map((col, i) => {
             return (
               <span className={`table-headings ${col.column}`}>
-                <span onClick={() => this.sort(col.value, i)}>{col.label}</span>
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={() => this.sort(col.value, i)}
+                >
+                  {col.label}
+                </span>
                 {col.value != "" && (
                   <span
                     className={this.state.caret[i] ? "caret up" : "caret"}

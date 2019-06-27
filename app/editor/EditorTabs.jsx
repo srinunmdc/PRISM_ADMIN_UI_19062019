@@ -34,6 +34,13 @@ class EditorTabs extends React.Component {
       closeAlert,
       wrongDynamicVariables
     } = this.props;
+
+    const tabLabels = {
+      EMAIL_BODY: "Email",
+      SMS_BODY: "Sms",
+      PUSH_BODY: "Push"
+    };
+
     const activeTab =
       alertTemplateStore.templateContentTypes.selected &&
       alertTemplateStore.templateContentTypes.selected[0];
@@ -77,32 +84,35 @@ class EditorTabs extends React.Component {
           </div>
         </div>
         <div className="flex editor-wrapper">
-          <div className="editor-left-wrapper" style={{ minHeight: "361px" }}>
-            {alertTemplateStore.alertTemplates.map(element => {
-              if (element.templateContentType !== activeTab) return undefined;
-              return (
-                <Editor
-                  data={data}
-                  emailSubjectData={emailSubjectData}
-                  onChangeSource={onChangeSource}
-                  onChange={onChange}
-                  onChangeEmailSubject={onChangeEmailSubject}
-                  activeTab={activeTab}
-                  activeTabEmailSubject={activeTabEmailSubject}
-                  edited={edited}
-                  onPublish={onPublish}
-                  onReject={onReject}
-                  onDraft={onDraft}
-                  onCancel={onCancel}
-                  onPreview={onPreview}
-                  onClickEdit={onClickEdit}
-                  showAlert={showAlert}
-                  closeAlert={closeAlert}
-                  wrongDynamicVariables={wrongDynamicVariables}
-                />
-              );
-            })}
-          </div>
+          {role !== "view" && (
+            <div className="editor-left-wrapper" style={{ minHeight: "361px" }}>
+              {alertTemplateStore.alertTemplates.map(element => {
+                if (element.templateContentType !== activeTab) return undefined;
+                return (
+                  <Editor
+                    data={data}
+                    emailSubjectData={emailSubjectData}
+                    onChangeSource={onChangeSource}
+                    onChange={onChange}
+                    onChangeEmailSubject={onChangeEmailSubject}
+                    activeTab={activeTab}
+                    activeTabEmailSubject={activeTabEmailSubject}
+                    edited={edited}
+                    onPublish={onPublish}
+                    onReject={onReject}
+                    onDraft={onDraft}
+                    onCancel={onCancel}
+                    onPreview={onPreview}
+                    onClickEdit={onClickEdit}
+                    showAlert={showAlert}
+                    closeAlert={closeAlert}
+                    wrongDynamicVariables={wrongDynamicVariables}
+                    tabLabels={tabLabels}
+                  />
+                );
+              })}
+            </div>
+          )}
           <div className="editor-right-wrapper">
             <EditorPreview
               data={data}
@@ -110,22 +120,29 @@ class EditorTabs extends React.Component {
               activeTab={activeTab}
               handlePreview={handlePreview}
               updatePreview={updatePreview}
+              role={role}
+              tabLabels={tabLabels}
             />
           </div>
         </div>
         <div className="row button-wrapper">
+          <div className="col-xs-4">{`Last Published ${
+            data.templateContentType
+          }`}</div>
           {(role === "publish" || role === "edit") && (
-            <EditorControl
-              data={data}
-              edited={edited}
-              activeTab={activeTab}
-              onPublish={onPublish}
-              onReject={onReject}
-              onDraft={onDraft}
-              onCancel={onCancel}
-              onPreview={onPreview}
-              onClickEdit={onClickEdit}
-            />
+            <div className="col-xs-8">
+              <EditorControl
+                data={data}
+                edited={edited}
+                activeTab={activeTab}
+                onPublish={onPublish}
+                onReject={onReject}
+                onDraft={onDraft}
+                onCancel={onCancel}
+                onPreview={onPreview}
+                onClickEdit={onClickEdit}
+              />
+            </div>
           )}
         </div>
       </div>

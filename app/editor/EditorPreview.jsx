@@ -7,9 +7,11 @@ const EditorPreview = ({
   emailSubjectData,
   activeTab,
   handlePreview,
-  updatePreview
+  updatePreview,
+  tabLabels,
+  role
 }) => {
-  const height = activeTab === "EMAIL_BODY" ? "535px" : "328px";
+  const height = activeTab === "EMAIL_BODY" ? "530px" : "328px";
   const previewDivStyle = {
     border: "1px solid #d1d1d1",
     overflow: "auto",
@@ -19,13 +21,19 @@ const EditorPreview = ({
   return (
     <React.Fragment>
       <div className="preview-header">
-        <span>Preview</span>
-        <div
-          className="glyphicon glyphicon-repeat preview-update"
-          onClick={handlePreview}
-        >
-          Update
-        </div>
+        <span>
+          <b>{`Preview ${tabLabels[activeTab]}`}</b>
+        </span>
+        {role !== "view" && (
+          <div
+            className="glyphicon glyphicon-repeat preview-update"
+            onClick={handlePreview}
+          >
+            <span style={{ textDecoration: "underline" }}>
+              <b>Update</b>
+            </span>
+          </div>
+        )}
       </div>
       <div className="preview-wrapper">
         <div style={previewDivStyle}>
@@ -63,7 +71,9 @@ const EditorPreview = ({
 EditorPreview.propTypes = {
   data: PropTypes.object.isRequired,
   activeTab: PropTypes.string.isRequired,
-  handlePreview: PropTypes.func.isRequired
+  handlePreview: PropTypes.func.isRequired,
+  tabLabels: PropTypes.string.isRequired,
+  role: PropTypes.string.isRequired
 };
 
 export default EditorPreview;

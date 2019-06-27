@@ -19,15 +19,8 @@ class Editor extends React.Component {
       activeTab,
       activeTabEmailSubject,
       edited,
-      showAlert,
-      closeAlert,
-      wrongDynamicVariables
+      tabLabels
     } = this.props;
-    const tabLabels = {
-      EMAIL_BODY: "Edit Email",
-      SMS_BODY: "Edit Sms",
-      PUSH_BODY: "Edit Push"
-    };
     const height = "262px";
     const commonRemove =
       "PasteText,PasteFromWord,Indent,Outdent,Scayt,Link,Unlink,Anchor,Image,Table,HorizontalRule,SpecialChar,Maximize,Strike,RemoveFormat,NumberedList,BulletedList,Blockquote,Styles,About,Subscript,Superscript";
@@ -38,7 +31,9 @@ class Editor extends React.Component {
     const finalRemove = commonRemove + extra;
     return (
       <div className="col">
-        <div className="row-xs-1 preview-header">{tabLabels[activeTab]}</div>
+        <div className="row-xs-1 preview-header">
+          <b>{`Edit ${tabLabels[activeTab]}`}</b>
+        </div>
         <div className="row-xs-11">
           <div style={{ minHeight: "203px" }}>
             {activeTabEmailSubject === "EMAIL_SUBJECT" && (
@@ -80,7 +75,8 @@ class Editor extends React.Component {
 
 Editor.propTypes = {
   data: PropTypes.object.isRequired,
-  onChangeSource: PropTypes.func.isRequired
+  onChangeSource: PropTypes.func.isRequired,
+  tabLabels: PropTypes.string.isRequired
 };
 
 export default Editor;

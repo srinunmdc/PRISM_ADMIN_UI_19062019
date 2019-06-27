@@ -2,13 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import CKEditor from "./NewCKEditor";
 
-const EditorPreview = ({
-  data,
-  height,
-  finalRemove,
-  onChange,
-  onChangeSource
-}) => {
+const Subject = ({ data, height, finalRemove, onChange, onChangeSource }) => {
   return (
     <React.Fragment>
       <div className="heading-margin-bottom">Subject</div>
@@ -32,14 +26,15 @@ const EditorPreview = ({
           }}
         />
       </div>
-      <div className="heading-margin-top-bottom">{`Characters (${
-        data.changedContent.length
-      })`}</div>
+      <div
+        className="subheading-margin-top-bottom"
+        style={{ fontSize: "14px" }}
+      >{`Characters (${data.changedContent.length})`}</div>
     </React.Fragment>
   );
 };
 
-EditorPreview.propTypes = {
+Subject.propTypes = {
   data: PropTypes.object.isRequired,
   height: PropTypes.string.isRequired,
   finalRemove: PropTypes.string.isRequired,
@@ -47,4 +42,4 @@ EditorPreview.propTypes = {
   onChangeSource: PropTypes.func.isRequired
 };
 
-export default EditorPreview;
+export default Subject;
