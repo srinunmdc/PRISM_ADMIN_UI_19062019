@@ -72,57 +72,52 @@ class EditorTabs extends React.Component {
         </div>
         <div className="flex editor-wrapper">
           <div className="editor-left-wrapper" style={{ minHeight: "361px" }}>
-            {alertTemplateStore.alertTemplates.map(element => {
-              if (element.templateContentType !== activeTab) return undefined;
-              return (
-                <Editor
-                  data={data}
-                  onChangeSource={onChangeSource}
-                  onChange={onChange}
-                  activeTab={activeTab}
-                  edited={edited}
-                  onPublish={onPublish}
-                  onReject={onReject}
-                  onDraft={onDraft}
-                  onCancel={onCancel}
-                  onPreview={onPreview}
-                  onClickEdit={onClickEdit}
-                  showAlert={showAlert}
-                  closeAlert={closeAlert}
-                  wrongDynamicVariables={wrongDynamicVariables}
-                  tabLabels={tabLabels}
-                />
-              );
-            })}
-          </div>
-          <div className="editor-right-wrapper">
-            {alertTemplateStore.alertTemplates.map(element => {
-              if (element.templateContentType !== activeTab) return undefined;
-              return (
-                <EditorPreview
-                  data={element}
-                  activeTab={activeTab}
-                  handlePreview={handlePreview}
-                  updatePreview={updatePreview}
-                  tabLabels={tabLabels}
-                />
-              );
-            })}
-          </div>
-        </div>
-        <div className="row button-wrapper">
-          {(role === "publish" || role === "edit") && (
-            <EditorControl
+            <Editor
               data={data}
-              edited={edited}
+              onChangeSource={onChangeSource}
+              onChange={onChange}
               activeTab={activeTab}
+              edited={edited}
               onPublish={onPublish}
               onReject={onReject}
               onDraft={onDraft}
               onCancel={onCancel}
               onPreview={onPreview}
               onClickEdit={onClickEdit}
+              showAlert={showAlert}
+              closeAlert={closeAlert}
+              wrongDynamicVariables={wrongDynamicVariables}
+              tabLabels={tabLabels}
             />
+          </div>
+          <div className="editor-right-wrapper">
+            <EditorPreview
+              data={data}
+              activeTab={activeTab}
+              handlePreview={handlePreview}
+              updatePreview={updatePreview}
+              tabLabels={tabLabels}
+            />
+          </div>
+        </div>
+        <div className="row button-wrapper">
+          <div className="col-xs-4">{`Last Published ${
+            data.templateContentType
+          }`}</div>
+          {(role === "publish" || role === "edit") && (
+            <div className="col-xs-8">
+              <EditorControl
+                data={data}
+                edited={edited}
+                activeTab={activeTab}
+                onPublish={onPublish}
+                onReject={onReject}
+                onDraft={onDraft}
+                onCancel={onCancel}
+                onPreview={onPreview}
+                onClickEdit={onClickEdit}
+              />
+            </div>
           )}
         </div>
       </div>

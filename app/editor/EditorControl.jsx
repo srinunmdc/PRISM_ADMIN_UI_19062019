@@ -17,9 +17,6 @@ class EditorConrol extends React.Component {
     } = this.props;
     // Here the edited state means that the data has changed by using ckeditor
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
-    if (role === "view") {
-      return null;
-    }
     return (
       <div className="col-md-12 col-sm-12 col-xs-12 button-panel">
         {role === "publish" &&

@@ -66,7 +66,6 @@ ul, ol {
 }
 
 .button-panel {
-    padding-top: 10px;
 	display: flex;
     justify-content: flex-end;
 }
@@ -227,7 +226,7 @@ ul, ol {
 .button-wrapper{
     margin: 0px;
     border-top: 3px solid #CCC;
-    padding: 5px 0px; 
+    padding: 10px 0px 5px 0px; 
 }
 .editor-button-wrapper{
     margin: 30px;
