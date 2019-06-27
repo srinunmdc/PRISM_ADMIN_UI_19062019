@@ -251,3 +251,13 @@ ul, ol {
 .preview-update {
     cursor: pointer;
 }
+
+.preview-email-subject {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.preview-email-body {
+    font-weight: bold;
+    text-decoration: underline;
+}

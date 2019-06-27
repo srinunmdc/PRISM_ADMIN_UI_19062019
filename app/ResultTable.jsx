@@ -104,10 +104,10 @@ class ResultTable extends React.Component {
         } else {
           let contentType;
           if (deliveryType) {
-            contentType = deliveryContentMapping[deliveryType][0];
+            contentType = deliveryContentMapping[deliveryType];
           } else {
             contentType =
-              deliveryContentMapping[alertTypeResource.deliveryTypes[0]][0];
+              deliveryContentMapping[alertTypeResource.deliveryTypes[0]];
           }
           AlertTemplateService.loadAlertTemplatesResources(
             alertTypeResource,
@@ -121,11 +121,11 @@ class ResultTable extends React.Component {
       if (collapseID === "") {
         AlertTemplateService.loadAlertTemplatesResources(
           alertTypeResource,
-          deliveryContentMapping[deliveryType][0]
+          deliveryContentMapping[deliveryType]
         );
       } else {
         AlertTemplateResourceStore.setSelectedContentType(
-          deliveryContentMapping[deliveryType][0]
+          deliveryContentMapping[deliveryType]
         );
       }
       this.setCollapseId(alertTypeResource.alertTypeId);
@@ -135,9 +135,39 @@ class ResultTable extends React.Component {
     // AlertTemplateResourceStore.resetStore();
   };
 
+  onChangeEmailSubject = evt => {
+    const { alertTemplateStore } = this.props;
+    const activeTabEmailSubject =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected.length > 1 &&
+      alertTemplateStore.templateContentTypes.selected[1];
+    let data;
+    alertTemplateStore.alertTemplates.forEach(element => {
+      if (element.templateContentType === activeTabEmailSubject) {
+        data = element;
+      }
+    });
+    const { edited, updatePreview } = this.state;
+    this.setState({
+      edited: {
+        ...edited,
+        [activeTabEmailSubject]: true,
+        updatePreview: updatePreview + 1
+      }
+    });
+    data.changedContent = evt.editor
+      .getData()
+      .replace(/\<p\>/g, "")
+      .replace(/\<\/p\>/g, "")
+      .replace(/(&nbsp;)/g, " ");
+  };
+
   onChange = evt => {
     const { alertTemplateStore } = this.props;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
+
+    const activeTab =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
     let data;
     alertTemplateStore.alertTemplates.forEach(element => {
       if (element.templateContentType === activeTab) {
@@ -172,7 +202,7 @@ class ResultTable extends React.Component {
     // evt.data.$.target.value [evt.sender.editor.mode === "source"]
     // evt.data.$.target.innerHTML [evt.sender.editor.mode === "wysiwyg"]
     const { alertTemplateStore } = this.props;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
+    const activeTab = alertTemplateStore.templateContentTypes.selected[0];
     let data;
     alertTemplateStore.alertTemplates.forEach(element => {
       if (element.templateContentType === activeTab) {
@@ -270,14 +300,26 @@ class ResultTable extends React.Component {
 
   handlePreview = () => {
     const { alertTemplateStore } = this.props;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
+    const activeTab =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
+    const activeTabEmailSubject =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected.length > 1 &&
+      alertTemplateStore.templateContentTypes.selected[1];
     let data;
+    let emailSubjectData;
     alertTemplateStore.alertTemplates.forEach(element => {
       if (element.templateContentType === activeTab) {
         data = element;
       }
+      if (element.templateContentType === activeTabEmailSubject)
+        emailSubjectData = element;
     });
     data.previewContent = data.changedContent;
+    if (emailSubjectData) {
+      emailSubjectData.previewContent = emailSubjectData.changedContent;
+    }
     const { updatePreview } = this.state;
     this.setState({ updatePreview: updatePreview + 1 });
   };
@@ -303,20 +345,45 @@ class ResultTable extends React.Component {
   onCancel = () => {
     const { alertTemplateStore } = this.props;
     const { edited, showAlert } = this.state;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
+    const activeTab =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
+    const activeTabEmailSubject =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected.length > 1 &&
+      alertTemplateStore.templateContentTypes.selected[1];
     let data;
+    let emailSubjectData;
     alertTemplateStore.alertTemplates.forEach(element => {
-      if (element.templateContentType === activeTab) {
-        data = element;
-      }
+      if (element.templateContentType === activeTab) data = element;
+      if (element.templateContentType === activeTabEmailSubject)
+        emailSubjectData = element;
     });
-    data.state = undefined;
-    this.setState({
-      edited: { ...edited, [activeTab]: false },
-      showAlert: { ...showAlert, [activeTab]: false },
-      wrongDynamicVariables: {}
-    });
-    data.changedContent = data.templateContent;
+    // data.state = undefined;
+    if (activeTabEmailSubject) {
+      this.setState({
+        edited: {
+          ...edited,
+          [activeTab]: false,
+          [activeTabEmailSubject]: false
+        },
+        showAlert: {
+          ...showAlert,
+          [activeTab]: false,
+          [activeTabEmailSubject]: false
+        },
+        wrongDynamicVariables: {}
+      });
+      data.changedContent = data.templateContent;
+      emailSubjectData.changedContent = emailSubjectData.templateContent;
+    } else {
+      this.setState({
+        edited: { ...edited, [activeTab]: false },
+        showAlert: { ...showAlert, [activeTab]: false },
+        wrongDynamicVariables: {}
+      });
+      data.changedContent = data.templateContent;
+    }
   };
 
   onReject = () => {
@@ -333,12 +400,11 @@ class ResultTable extends React.Component {
     this.setState({ hoverIndex: null });
   };
 
-  renderResultRow = (obj, accordianEvenOdd, index) => {
+  renderResultRow = obj => {
     const {
       collapseID,
       edited,
       showAlert,
-      hoverIndex,
       wrongDynamicVariables,
       rejectAlert,
       updatePreview
@@ -426,6 +492,7 @@ class ResultTable extends React.Component {
                     edited={edited}
                     onChangeSource={this.onChangeSource}
                     onChange={this.onChange}
+                    onChangeEmailSubject={this.onChangeEmailSubject}
                     onPublish={this.onPublish}
                     onReject={this.onReject}
                     rejectAlert={rejectAlert}

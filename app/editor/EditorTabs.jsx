@@ -7,8 +7,7 @@ import EditorPreview from "./EditorPreview";
 import AlertTemplateResourceStore from "../store/AlertTemplateStore";
 import Alert from "../Alert";
 
-@inject("alertTemplateStore")
-@inject("alertPermissionStore")
+@inject("alertPermissionStore", "alertTemplateStore")
 @observer
 class EditorTabs extends React.Component {
   onClickTabItem(tab) {
@@ -20,6 +19,7 @@ class EditorTabs extends React.Component {
       edited,
       alertTemplateStore,
       onChange,
+      onChangeEmailSubject,
       onChangeSource,
       alertPermissionStore,
       onPublish,
@@ -34,11 +34,22 @@ class EditorTabs extends React.Component {
       closeAlert,
       wrongDynamicVariables
     } = this.props;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
+    const activeTab =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
+    const activeTabEmailSubject =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected.length > 1 &&
+      alertTemplateStore.templateContentTypes.selected[1];
+
     let data = null;
+    let emailSubjectData = null;
     alertTemplateStore.alertTemplates.forEach(element => {
       if (element.templateContentType === activeTab) data = element;
+      if (element.templateContentType === activeTabEmailSubject)
+        emailSubjectData = element;
     });
+
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
     const showAlertClass = showAlert[activeTab] ? {} : { display: "none" };
     const UnsupportedKeywords =
@@ -72,9 +83,12 @@ class EditorTabs extends React.Component {
               return (
                 <Editor
                   data={data}
+                  emailSubjectData={emailSubjectData}
                   onChangeSource={onChangeSource}
                   onChange={onChange}
+                  onChangeEmailSubject={onChangeEmailSubject}
                   activeTab={activeTab}
+                  activeTabEmailSubject={activeTabEmailSubject}
                   edited={edited}
                   onPublish={onPublish}
                   onReject={onReject}
@@ -90,17 +104,13 @@ class EditorTabs extends React.Component {
             })}
           </div>
           <div className="editor-right-wrapper">
-            {alertTemplateStore.alertTemplates.map(element => {
-              if (element.templateContentType !== activeTab) return undefined;
-              return (
-                <EditorPreview
-                  data={element}
-                  activeTab={activeTab}
-                  handlePreview={handlePreview}
-                  updatePreview={updatePreview}
-                />
-              );
-            })}
+            <EditorPreview
+              data={data}
+              emailSubjectData={emailSubjectData}
+              activeTab={activeTab}
+              handlePreview={handlePreview}
+              updatePreview={updatePreview}
+            />
           </div>
         </div>
         <div className="row button-wrapper">
