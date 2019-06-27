@@ -119,6 +119,14 @@ class ResultTable extends React.Component {
         }
       }
     } else {
+      // if he clicks on icon of different alerttype
+      if (
+        collapseID !== alertTypeResource.alertTypeId &&
+        Object.values(edited).includes(true)
+      ) {
+        this.setState({ confirmModalShow: true });
+        return;
+      }
       // first time opened load the data
       if (collapseID === "") {
         AlertTemplateService.loadAlertTemplatesResources(

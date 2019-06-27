@@ -259,3 +259,11 @@ ul, ol {
 .preview-update {
     cursor: pointer;
 }
+.full-screen-wrapper {
+    border-bottom: 2px solid #EDEDED;
+    border: 1px solid rgb(209,209,209);
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    padding: 0px 20px;
+}
