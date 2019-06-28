@@ -96,6 +96,12 @@ class ResultTable extends React.Component {
 
   expandAccordian = (e, alertTypeResource, deliveryType) => {
     e.stopPropagation();
+    if (
+      deliveryType &&
+      !alertTypeResource.deliveryTypes.includes(deliveryType)
+    ) {
+      return;
+    }
     const onClickChannel = !!deliveryType;
     const { collapseID, edited } = this.state;
     // const deliveryTypes = alertTypeResource.deliveryTypes
@@ -128,6 +134,14 @@ class ResultTable extends React.Component {
         }
       }
     } else {
+      // if he clicks on icon of different alerttype
+      if (
+        collapseID !== alertTypeResource.alertTypeId &&
+        Object.values(edited).includes(true)
+      ) {
+        this.setState({ confirmModalShow: true });
+        return;
+      }
       // first time opened load the data
       if (collapseID === "") {
         AlertTemplateService.loadAlertTemplatesResources(
@@ -532,6 +546,10 @@ class ResultTable extends React.Component {
     this.setState({ hoverIndex: null });
   };
 
+  onClickDisabled = e => {
+    e.stopPropagation();
+  };
+
   renderResultRow = obj => {
     const {
       collapseID,
@@ -548,7 +566,7 @@ class ResultTable extends React.Component {
       alertTemplateStore.templateContentTypes.selected[0];
     return (
       <React.Fragment>
-        <div className="row-margin">
+        <div className="row-margin white-background">
           <div
             className="flex"
             style={{ cursor: "pointer" }}
@@ -575,11 +593,7 @@ class ResultTable extends React.Component {
                       : "glyphicon glyphicon-envelope icon-margin"
                   }
                   style={obj.deliveryTypes.includes("EMAIL") ? {} : hidden}
-                  onClick={
-                    obj.deliveryTypes.includes("EMAIL")
-                      ? e => this.expandAccordian(e, obj, "EMAIL")
-                      : null
-                  }
+                  onClick={e => this.expandAccordian(e, obj, "EMAIL")}
                 />
                 <span
                   className={
@@ -589,11 +603,7 @@ class ResultTable extends React.Component {
                       : "glyphicon glyphicon-comment icon-margin"
                   }
                   style={obj.deliveryTypes.includes("SMS") ? {} : hidden}
-                  onClick={
-                    obj.deliveryTypes.includes("SMS")
-                      ? e => this.expandAccordian(e, obj, "SMS")
-                      : null
-                  }
+                  onClick={e => this.expandAccordian(e, obj, "SMS")}
                 />
                 <span
                   className={
@@ -603,11 +613,7 @@ class ResultTable extends React.Component {
                       : "glyphicon glyphicon-bell icon-margin"
                   }
                   style={obj.deliveryTypes.includes("PUSH") ? {} : hidden}
-                  onClick={
-                    obj.deliveryTypes.includes("PUSH")
-                      ? e => this.expandAccordian(e, obj, "PUSH")
-                      : null
-                  }
+                  onClick={e => this.expandAccordian(e, obj, "PUSH")}
                 />
               </div>
               <div className="text-truncate col-xs-4">{obj.description}</div>

@@ -67,7 +67,7 @@ class MainLayout extends Component {
         }}
       >
         <div>
-          <div className="ad-search-pannel">
+          <div className="ad-search-pannel search-box white-background">
             <AdvancedSearch />
           </div>
           <div className="row">

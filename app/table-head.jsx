@@ -21,7 +21,7 @@ class tableHead extends React.Component {
 
   render() {
     return (
-      <div className="flex">
+      <div className="flex head-wrapper-box">
         <div style={{ width: "30px" }}> </div>
         <div className="row table-heading-row">
           {this.props.columns.map((col, i) => {
