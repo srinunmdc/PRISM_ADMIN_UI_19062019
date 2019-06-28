@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Backdrop from "./backdrop";
 
-const FullScreenModal = ({ show, close, content }) => {
+const FullScreenModal = ({ show, close, content, subjectContent }) => {
   const modalClassesArr = ["modal", "fade"];
 
   let backdrop = null;
@@ -54,12 +54,28 @@ const FullScreenModal = ({ show, close, content }) => {
               </button>
             </div>
             <div className="preview-wrapper">
-              <div
-                style={previewDivStyle}
-                dangerouslySetInnerHTML={{
-                  __html: content
-                }}
-              />
+              <div style={previewDivStyle}>
+                {subjectContent && (
+                  <div>
+                    <div className="preview-email-subject">Email Subject</div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: subjectContent
+                      }}
+                    />
+                  </div>
+                )}
+                <div>
+                  {subjectContent && (
+                    <div className="preview-email-subject">Email Body</div>
+                  )}
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: content
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
