@@ -188,12 +188,17 @@ ul, ol {
     word-break: break-word;
 }
 .table-heading-row{
-    border-top: #666666 solid 3px;
-    margin-bottom: 20px;
     padding: 5px 0px;
     width: calc(100% - 30px);
 }
-.table-row{;
+.head-wrapper-box {
+    box-shadow: -2px 3px 8px 0px rgba(102,102,102,0.5);
+    background: #F5F5F5;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.table-row{
     padding: 8px 0px;
     width: calc(100% - 30px);
 }
@@ -266,4 +271,12 @@ ul, ol {
     align-items: center;
     flex-direction: row-reverse;
     padding: 0px 20px;
+}
+.search-box{
+    padding: 10px 10px 15px 10px;
+    box-shadow: -2px 3px 8px 0px rgba(102,102,102,0.5);
+}
+
+.white-background{
+    background-color: white;
 }

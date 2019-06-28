@@ -385,7 +385,7 @@ class ResultTable extends React.Component {
     const activeChannel = alertTemplateStore.templateContentTypes.selected;
     return (
       <React.Fragment>
-        <div className="row-margin">
+        <div className="row-margin white-background">
           <div
             className="flex"
             style={{ cursor: "pointer" }}
