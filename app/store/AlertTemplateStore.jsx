@@ -21,7 +21,7 @@ class AlertTemplateStore {
         this.templateContentTypes.options = contentTypes;
       } else {
         this.templateContentTypes = {
-          selected: contentType || contentTypes[0],
+          selected: contentType,
           options: contentTypes
         };
       }

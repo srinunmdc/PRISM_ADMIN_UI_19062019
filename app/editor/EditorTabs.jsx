@@ -7,8 +7,7 @@ import EditorPreview from "./EditorPreview";
 import AlertTemplateResourceStore from "../store/AlertTemplateStore";
 import Alert from "../Alert";
 
-@inject("alertTemplateStore")
-@inject("alertPermissionStore")
+@inject("alertPermissionStore", "alertTemplateStore")
 @observer
 class EditorTabs extends React.Component {
   onClickTabItem(tab) {
@@ -20,6 +19,7 @@ class EditorTabs extends React.Component {
       edited,
       alertTemplateStore,
       onChange,
+      onChangeEmailSubject,
       onChangeSource,
       alertPermissionStore,
       onPublish,
@@ -34,21 +34,46 @@ class EditorTabs extends React.Component {
       closeAlert,
       wrongDynamicVariables
     } = this.props;
+
     const tabLabels = {
       EMAIL_BODY: "Email",
       SMS_BODY: "Sms",
       PUSH_BODY: "Push"
     };
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
+
+    const activeTab =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
+    const activeTabEmailSubject =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected.length > 1 &&
+      alertTemplateStore.templateContentTypes.selected[1];
+
     let data = null;
+    let emailSubjectData = null;
     alertTemplateStore.alertTemplates.forEach(element => {
       if (element.templateContentType === activeTab) data = element;
+      if (element.templateContentType === activeTabEmailSubject)
+        emailSubjectData = element;
     });
+
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
-    const showAlertClass = showAlert[activeTab] ? {} : { display: "none" };
-    const UnsupportedKeywords =
-      wrongDynamicVariables[activeTab] &&
-      wrongDynamicVariables[activeTab].join(",  ");
+    const showAlertClass =
+      showAlert[activeTab] || showAlert[activeTabEmailSubject]
+        ? {}
+        : { display: "none" };
+
+    let unsupportedKeywords = "";
+    if (wrongDynamicVariables[activeTabEmailSubject]) {
+      unsupportedKeywords += wrongDynamicVariables[activeTabEmailSubject].join(
+        ",  "
+      );
+    }
+
+    if (wrongDynamicVariables[activeTab]) {
+      unsupportedKeywords += wrongDynamicVariables[activeTab].join(",  ");
+    }
+
     const highlightedMessage =
       wrongDynamicVariables[activeTab] &&
       wrongDynamicVariables[activeTab].length > 1
@@ -64,7 +89,7 @@ class EditorTabs extends React.Component {
             <Alert
               alertClass="danger"
               highlightedMessage={highlightedMessage}
-              detailMessage={UnsupportedKeywords}
+              detailMessage={unsupportedKeywords}
               showCloseIcon
               handleClose={closeAlert}
             />
@@ -73,33 +98,42 @@ class EditorTabs extends React.Component {
         <div className="flex editor-wrapper">
           {role !== "view" && (
             <div className="editor-left-wrapper" style={{ minHeight: "361px" }}>
-              <Editor
-                data={data}
-                onChangeSource={onChangeSource}
-                onChange={onChange}
-                activeTab={activeTab}
-                edited={edited}
-                onPublish={onPublish}
-                onReject={onReject}
-                onDraft={onDraft}
-                onCancel={onCancel}
-                onPreview={onPreview}
-                onClickEdit={onClickEdit}
-                showAlert={showAlert}
-                closeAlert={closeAlert}
-                wrongDynamicVariables={wrongDynamicVariables}
-                tabLabels={tabLabels}
-              />
+              {alertTemplateStore.alertTemplates.map(element => {
+                if (element.templateContentType !== activeTab) return undefined;
+                return (
+                  <Editor
+                    data={data}
+                    emailSubjectData={emailSubjectData}
+                    onChangeSource={onChangeSource}
+                    onChange={onChange}
+                    onChangeEmailSubject={onChangeEmailSubject}
+                    activeTab={activeTab}
+                    activeTabEmailSubject={activeTabEmailSubject}
+                    edited={edited}
+                    onPublish={onPublish}
+                    onReject={onReject}
+                    onDraft={onDraft}
+                    onCancel={onCancel}
+                    onPreview={onPreview}
+                    onClickEdit={onClickEdit}
+                    showAlert={showAlert}
+                    closeAlert={closeAlert}
+                    wrongDynamicVariables={wrongDynamicVariables}
+                    tabLabels={tabLabels}
+                  />
+                );
+              })}
             </div>
           )}
           <div className="editor-right-wrapper">
             <EditorPreview
               data={data}
+              emailSubjectData={emailSubjectData}
               activeTab={activeTab}
               handlePreview={handlePreview}
               updatePreview={updatePreview}
-              tabLabels={tabLabels}
               role={role}
+              tabLabels={tabLabels}
             />
           </div>
         </div>
@@ -111,6 +145,8 @@ class EditorTabs extends React.Component {
             <div className="col-xs-8">
               <EditorControl
                 data={data}
+                // emailSubjectData={emailSubjectData}
+                activeTabEmailSubject={activeTabEmailSubject}
                 edited={edited}
                 activeTab={activeTab}
                 onPublish={onPublish}
@@ -141,12 +177,7 @@ EditorTabs.propTypes = {
   onClickEdit: PropTypes.func.isRequired,
   showAlert: PropTypes.object.isRequired,
   closeAlert: PropTypes.func.isRequired,
-  wrongDynamicVariables: PropTypes.shape({
-    EMAIL_BODY: PropTypes.array.isRequired,
-    EMAIL_SUBJECT: PropTypes.array.isRequired,
-    PUSH_BODY: PropTypes.array.isRequired,
-    SMS_BODY: PropTypes.array.isRequired
-  }).isRequired
+  wrongDynamicVariables: PropTypes.object.isRequired
 };
 
 export default EditorTabs;

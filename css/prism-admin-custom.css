@@ -264,6 +264,17 @@ ul, ol {
 .preview-update {
     cursor: pointer;
 }
+
+.preview-email-subject {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.preview-email-body {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 .full-screen-wrapper {
     border-bottom: 2px solid #EDEDED;
     border: 1px solid rgb(209,209,209);

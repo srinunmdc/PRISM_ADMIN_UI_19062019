@@ -12,9 +12,12 @@ class Editor extends React.Component {
   render() {
     const {
       data,
+      emailSubjectData,
       onChangeSource,
       onChange,
+      onChangeEmailSubject,
       activeTab,
+      activeTabEmailSubject,
       edited,
       tabLabels
     } = this.props;
@@ -33,12 +36,12 @@ class Editor extends React.Component {
         </div>
         <div className="row-xs-11">
           <div style={{ minHeight: "203px" }}>
-            {activeTab === "EMAIL_BODY" && (
+            {activeTabEmailSubject === "EMAIL_SUBJECT" && (
               <Subject
                 onChangeSource={onChangeSource}
-                onChange={onChange}
+                onChange={onChangeEmailSubject}
                 height="88px"
-                data={data}
+                data={emailSubjectData}
                 finalRemove={finalRemove}
               />
             )}

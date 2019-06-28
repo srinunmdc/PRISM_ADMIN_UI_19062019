@@ -28,6 +28,7 @@ class EditorPreview extends React.Component {
       data,
       activeTab,
       handlePreview,
+      emailSubjectData,
       updatePreview,
       tabLabels,
       role
@@ -69,15 +70,33 @@ class EditorPreview extends React.Component {
           />
         </div>
         <div className="preview-wrapper">
-          <div
-            style={previewDivStyle}
-            dangerouslySetInnerHTML={{
-              __html: replaceDynamicVariable(
-                data.previewContent,
-                data.variableMap
-              )
-            }}
-          />
+          <div style={previewDivStyle}>
+            {emailSubjectData && (
+              <>
+                <div className="preview-email-subject">Email Subject</div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: replaceDynamicVariable(
+                      emailSubjectData.previewContent,
+                      emailSubjectData.variableMap
+                    )
+                  }}
+                />
+              </>
+            )}
+
+            {activeTab === "EMAIL_BODY" && (
+              <div className="preview-email-body">Email Body</div>
+            )}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: replaceDynamicVariable(
+                  data.previewContent,
+                  data.variableMap
+                )
+              }}
+            />
+          </div>
         </div>
         <FullScreenModal
           show={modalShow}
