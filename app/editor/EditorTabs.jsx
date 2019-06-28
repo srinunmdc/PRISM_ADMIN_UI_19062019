@@ -58,10 +58,22 @@ class EditorTabs extends React.Component {
     });
 
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
-    const showAlertClass = showAlert[activeTab] ? {} : { display: "none" };
-    const UnsupportedKeywords =
-      wrongDynamicVariables[activeTab] &&
-      wrongDynamicVariables[activeTab].join(",  ");
+    const showAlertClass =
+      showAlert[activeTab] || showAlert[activeTabEmailSubject]
+        ? {}
+        : { display: "none" };
+
+    let unsupportedKeywords = "";
+    if (wrongDynamicVariables[activeTabEmailSubject]) {
+      unsupportedKeywords += wrongDynamicVariables[activeTabEmailSubject].join(
+        ",  "
+      );
+    }
+
+    if (wrongDynamicVariables[activeTab]) {
+      unsupportedKeywords += wrongDynamicVariables[activeTab].join(",  ");
+    }
+
     const highlightedMessage =
       wrongDynamicVariables[activeTab] &&
       wrongDynamicVariables[activeTab].length > 1
@@ -77,7 +89,7 @@ class EditorTabs extends React.Component {
             <Alert
               alertClass="danger"
               highlightedMessage={highlightedMessage}
-              detailMessage={UnsupportedKeywords}
+              detailMessage={unsupportedKeywords}
               showCloseIcon
               handleClose={closeAlert}
             />
@@ -133,6 +145,8 @@ class EditorTabs extends React.Component {
             <div className="col-xs-8">
               <EditorControl
                 data={data}
+                // emailSubjectData={emailSubjectData}
+                activeTabEmailSubject={activeTabEmailSubject}
                 edited={edited}
                 activeTab={activeTab}
                 onPublish={onPublish}
@@ -163,12 +177,7 @@ EditorTabs.propTypes = {
   onClickEdit: PropTypes.func.isRequired,
   showAlert: PropTypes.object.isRequired,
   closeAlert: PropTypes.func.isRequired,
-  wrongDynamicVariables: PropTypes.shape({
-    EMAIL_BODY: PropTypes.array.isRequired,
-    EMAIL_SUBJECT: PropTypes.array.isRequired,
-    PUSH_BODY: PropTypes.array.isRequired,
-    SMS_BODY: PropTypes.array.isRequired
-  }).isRequired
+  wrongDynamicVariables: PropTypes.object.isRequired
 };
 
 export default EditorTabs;

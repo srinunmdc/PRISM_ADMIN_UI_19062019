@@ -24,9 +24,9 @@ class ResultTable extends React.Component {
       edited: {},
       confirmModalShow: false,
       confirmRejectModalShow: false,
-      showAlert: {}, // have to make showAlert keys dynamic by taking value from templateContentTypes in alertTemplateSore
+      showAlert: {},
       hoverIndex: null,
-      wrongDynamicVariables: {}, // have to make wrongDynamicVariables keys dynamic by taking value from templateContentTypes in alertTemplateSore
+      wrongDynamicVariables: {},
       updatePreview: 0
     };
     this.sortFields = this.sortFields.bind(this);
@@ -71,14 +71,23 @@ class ResultTable extends React.Component {
   continueRejectEditing = () => {
     this.setState({ confirmRejectModalShow: false });
     const { alertTemplateStore } = this.props;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
+    const activeTab =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
+    const activeTabEmailSubject =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected.length > 1 &&
+      alertTemplateStore.templateContentTypes.selected[1];
     let data;
+    let emailSubjectData;
     alertTemplateStore.alertTemplates.forEach(element => {
-      if (element.templateContentType === activeTab) {
-        data = element;
-      }
+      if (element.templateContentType === activeTab) data = element;
+
+      if (element.templateContentType === activeTabEmailSubject)
+        emailSubjectData = element;
     });
     AlertTemplateService.deleteTemplate(data);
+    AlertTemplateService.deleteTemplate(emailSubjectData);
   };
 
   resetTemplateStore = () => {
@@ -270,23 +279,47 @@ class ResultTable extends React.Component {
   onDraft = () => {
     const { alertTemplateStore } = this.props;
     const { edited, wrongDynamicVariables, showAlert } = this.state;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
+    const activeTab =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
+    const activeTabEmailSubject =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected.length > 1 &&
+      alertTemplateStore.templateContentTypes.selected[1];
     let data;
+    let emailSubjectData;
     let error;
     alertTemplateStore.alertTemplates.forEach(element => {
-      if (element.templateContentType === activeTab) {
-        data = element;
-      }
+      if (element.templateContentType === activeTab) data = element;
+      if (element.templateContentType === activeTabEmailSubject)
+        emailSubjectData = element;
     });
+
+    const regex = /\${[^$]*?\}/g;
+
     data.changedContent = data.changedContent.replace(/(&zwnj;)/g, "");
     data.changedContent = addSpans(data.changedContent);
-    // const regex = /\${\w*\}/g;
-
     const content = data.changedContent;
     const dynamicError = [];
-    const regex = /\${[^$]*?\}/g;
+    const emailSubjectDynamicError = [];
     const dynamicVariables = innerTextOfSpans(data.changedContent).match(regex);
-    if (dynamicVariables) {
+    let emailSubjectContent;
+    let emailSubjectDynamicVaiables;
+    if (activeTabEmailSubject) {
+      emailSubjectData.changedContent = emailSubjectData.changedContent.replace(
+        /(&zwnj;)/g,
+        ""
+      );
+      emailSubjectData.changedContent = addSpans(
+        emailSubjectData.changedContent
+      );
+      emailSubjectContent = emailSubjectData.changedContent;
+      emailSubjectDynamicVaiables = innerTextOfSpans(
+        emailSubjectData.changedContent
+      ).match(regex);
+    }
+
+    if (dynamicVariables && !emailSubjectDynamicVaiables) {
       dynamicVariables.forEach(dynamicVariable => {
         const matchedString = dynamicVariable.substring(
           2,
@@ -298,20 +331,100 @@ class ResultTable extends React.Component {
           this.setState({
             wrongDynamicVariables: {
               ...wrongDynamicVariables,
-              [activeTab]: dynamicError
+              [activeTab]: dynamicError,
+              EMAIL_SUBJECT: []
             }
           });
         }
       });
     }
-    if (!error) {
-      data.templateContent = content;
-      // data.state = "DRAFT";
-      AlertTemplateService.saveTemplate(data);
-      this.setState({
-        edited: { ...edited, [activeTab]: false },
-        showAlert: { ...showAlert, [activeTab]: false }
+
+    if (emailSubjectDynamicVaiables && !dynamicVariables) {
+      emailSubjectDynamicVaiables.forEach(emailSubjectDynamicVaiable => {
+        const matchedString = emailSubjectDynamicVaiable.substring(
+          2,
+          emailSubjectDynamicVaiable.length - 1
+        );
+        if (
+          !emailSubjectData.variableMap ||
+          !emailSubjectData.variableMap[matchedString]
+        ) {
+          error = true;
+          emailSubjectDynamicError.push(emailSubjectDynamicVaiables);
+          this.setState({
+            wrongDynamicVariables: {
+              ...wrongDynamicVariables,
+              [activeTabEmailSubject]: emailSubjectDynamicError
+            }
+          });
+        }
       });
+    }
+
+    if (emailSubjectDynamicVaiables && dynamicVariables) {
+      emailSubjectDynamicVaiables.forEach(emailSubjectDynamicVaiable => {
+        const matchedString = emailSubjectDynamicVaiable.substring(
+          2,
+          emailSubjectDynamicVaiable.length - 1
+        );
+        if (
+          !emailSubjectData.variableMap ||
+          !emailSubjectData.variableMap[matchedString]
+        ) {
+          error = true;
+          emailSubjectDynamicError.push(emailSubjectDynamicVaiables);
+        }
+      });
+
+      dynamicVariables.forEach(dynamicVariable => {
+        const matchedString = dynamicVariable.substring(
+          2,
+          dynamicVariable.length - 1
+        );
+        if (!data.variableMap || !data.variableMap[matchedString]) {
+          error = true;
+          dynamicError.push(dynamicVariable);
+        }
+      });
+
+      this.setState({
+        wrongDynamicVariables: {
+          ...wrongDynamicVariables,
+          [activeTabEmailSubject]: emailSubjectDynamicError,
+          [activeTab]: dynamicError
+        }
+      });
+    }
+
+    if (!error) {
+      if (emailSubjectData) {
+        data.templateContent = content;
+        emailSubjectData.templateContent = emailSubjectContent;
+        // data.state = "DRAFT";
+        // emailSubjectData.state = "DRAFT";
+        AlertTemplateService.saveTemplate(data);
+        AlertTemplateService.saveTemplate(emailSubjectData);
+        this.setState({
+          edited: {
+            ...edited,
+            [activeTab]: false,
+            [activeTabEmailSubject]: false
+          },
+          showAlert: {
+            ...showAlert,
+            [activeTab]: false,
+            [activeTabEmailSubject]: false
+          }
+        });
+      } else {
+        data.templateContent = content;
+        // data.state = "DRAFT";
+        AlertTemplateService.saveTemplate(data);
+        this.setState({
+          edited: { ...edited, [activeTab]: false },
+          showAlert: { ...showAlert, [activeTab]: false }
+        });
+      }
     } else {
       this.setState({ showAlert: { ...showAlert, [activeTab]: true } });
     }
@@ -430,7 +543,9 @@ class ResultTable extends React.Component {
     } = this.state;
     const hidden = { opacity: 0.5 };
     const { alertTemplateStore } = this.props;
-    const activeChannel = alertTemplateStore.templateContentTypes.selected;
+    const activeChannel =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
     return (
       <React.Fragment>
         <div className="row-margin">
@@ -537,7 +652,13 @@ class ResultTable extends React.Component {
   closeAlert = () => {
     const { alertTemplateStore } = this.props;
     const { showAlert } = this.state;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
+    const activeTab =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
+    const activeTabEmailSubject =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected.length > 1 &&
+      alertTemplateStore.templateContentTypes.selected[1];
     this.setState({
       showAlert: { ...showAlert, [activeTab]: false },
       rejectAlert: false

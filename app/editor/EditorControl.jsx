@@ -4,11 +4,28 @@ import { inject } from "mobx-react";
 
 @inject("alertPermissionStore")
 class EditorConrol extends React.Component {
+  processShowButton = () => {
+    const { edited, activeTab, activeTabEmailSubject } = this.props;
+    if (activeTabEmailSubject) {
+      return !edited[activeTab] && !edited[activeTabEmailSubject];
+    }
+    return !edited[activeTab];
+  };
+
+  toShowPublish = () => {
+    return this.processShowButton();
+  };
+
+  toShowReject = () => {
+    return this.processShowButton();
+  };
+
   render() {
     const {
       data,
       edited,
       activeTab,
+      activeTabEmailSubject,
       onPublish,
       onReject,
       onDraft,
@@ -22,7 +39,7 @@ class EditorConrol extends React.Component {
         {role === "publish" &&
         data.state &&
         data.state === "DRAFT" &&
-        !edited[activeTab] ? (
+        this.toShowPublish() ? (
           <div>
             <button
               type="button"
@@ -36,7 +53,7 @@ class EditorConrol extends React.Component {
         {role === "publish" &&
         data.state &&
         data.state === "DRAFT" &&
-        (edited[activeTab] === undefined || edited[activeTab] === false) ? (
+        this.toShowReject() ? (
           <div>
             <button
               type="button"
@@ -47,7 +64,7 @@ class EditorConrol extends React.Component {
             </button>
           </div>
         ) : null}
-        {edited[activeTab] ? (
+        {edited[activeTab] || edited[activeTabEmailSubject] ? (
           <div>
             <button
               type="button"
@@ -58,7 +75,7 @@ class EditorConrol extends React.Component {
             </button>
           </div>
         ) : null}
-        {edited[activeTab] ? (
+        {edited[activeTab] || edited[activeTabEmailSubject] ? (
           <div>
             <button
               type="button"
