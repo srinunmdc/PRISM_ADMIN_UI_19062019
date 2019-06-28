@@ -18,7 +18,7 @@ class Editor extends React.Component {
       edited,
       tabLabels
     } = this.props;
-    const height = "262px";
+    const height = activeTab === "EMAIL_BODY" ? "262px" : "272px";
     const commonRemove =
       "PasteText,PasteFromWord,Indent,Outdent,Scayt,Link,Unlink,Anchor,Image,Table,HorizontalRule,SpecialChar,Maximize,Strike,RemoveFormat,NumberedList,BulletedList,Blockquote,Styles,About,Subscript,Superscript";
     let extra = "";
