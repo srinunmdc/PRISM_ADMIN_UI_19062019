@@ -193,9 +193,9 @@ class ResultTable extends React.Component {
     this.setState({
       edited: {
         ...edited,
-        [activeTabEmailSubject]: true,
-        updatePreview: updatePreview + 1
-      }
+        [activeTabEmailSubject]: true
+      },
+      updatePreview: updatePreview + 1
     });
     data.changedContent = evt.editor
       .getData()
@@ -218,7 +218,7 @@ class ResultTable extends React.Component {
     });
     const { edited, updatePreview } = this.state;
     this.setState({
-      edited: { ...edited, [activeTab]: true, updatePreview: updatePreview + 1 }
+      edited: { ...edited, [activeTab]: true }
     });
     if (data.templateContentType === "EMAIL_BODY") {
       data.changedContent = evt.editor.getData();

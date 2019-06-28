@@ -72,7 +72,7 @@ class EditorPreview extends React.Component {
         <div className="preview-wrapper">
           <div style={previewDivStyle}>
             {emailSubjectData && (
-              <>
+              <div>
                 <div className="preview-email-subject">Email Subject</div>
                 <div
                   dangerouslySetInnerHTML={{
@@ -82,7 +82,7 @@ class EditorPreview extends React.Component {
                     )
                   }}
                 />
-              </>
+              </div>
             )}
 
             {activeTab === "EMAIL_BODY" && (
@@ -101,6 +101,13 @@ class EditorPreview extends React.Component {
         <FullScreenModal
           show={modalShow}
           close={this.closeModal}
+          subjectContent={
+            emailSubjectData &&
+            replaceDynamicVariable(
+              emailSubjectData.previewContent,
+              emailSubjectData.variableMap
+            )
+          }
           content={replaceDynamicVariable(
             data.previewContent,
             data.variableMap
