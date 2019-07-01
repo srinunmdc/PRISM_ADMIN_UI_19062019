@@ -206,7 +206,6 @@ class ResultTable extends React.Component {
 
   onChange = evt => {
     const { alertTemplateStore } = this.props;
-
     const activeTab =
       alertTemplateStore.templateContentTypes.selected &&
       alertTemplateStore.templateContentTypes.selected[0];
@@ -490,7 +489,7 @@ class ResultTable extends React.Component {
 
   onCancel = () => {
     const { alertTemplateStore } = this.props;
-    const { edited, showAlert } = this.state;
+    const { edited, showAlert, updatePreview } = this.state;
     const activeTab =
       alertTemplateStore.templateContentTypes.selected &&
       alertTemplateStore.templateContentTypes.selected[0];
@@ -526,10 +525,12 @@ class ResultTable extends React.Component {
       this.setState({
         edited: { ...edited, [activeTab]: false },
         showAlert: { ...showAlert, [activeTab]: false },
-        wrongDynamicVariables: {}
+        wrongDynamicVariables: {},
+        updatePreview: updatePreview + 1
       });
       data.changedContent = data.templateContent;
     }
+    CKEDITOR.instances["editor2"].setData(data.changedContent);
   };
 
   onReject = () => {

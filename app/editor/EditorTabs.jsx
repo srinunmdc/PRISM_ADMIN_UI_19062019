@@ -102,7 +102,7 @@ class EditorTabs extends React.Component {
                 if (element.templateContentType !== activeTab) return undefined;
                 return (
                   <Editor
-                    data={data}
+                    data={element}
                     emailSubjectData={emailSubjectData}
                     onChangeSource={onChangeSource}
                     onChange={onChange}

@@ -58,6 +58,7 @@ class CKEditor extends React.Component {
     }
 
     window.CKEDITOR.dtd.$removeEmpty.span = false;
+    window.CKEDITOR.name = "hello";
 
    /* if (!window.CKEDITOR.plugins.get("dragFields")) {
       window.CKEDITOR.plugins.add("dragFields", {
