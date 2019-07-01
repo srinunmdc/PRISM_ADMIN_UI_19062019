@@ -86,6 +86,11 @@ class ResultTable extends React.Component {
       if (element.templateContentType === activeTabEmailSubject)
         emailSubjectData = element;
     });
+    // data.state = "PUBLISHED";
+    const { edited } = this.state;
+    this.setState({
+      edited: { ...edited, [activeTab]: false, [activeTabEmailSubject]: false }
+    });
     AlertTemplateService.deleteTemplate(data);
     AlertTemplateService.deleteTemplate(emailSubjectData);
   };
@@ -346,7 +351,7 @@ class ResultTable extends React.Component {
             wrongDynamicVariables: {
               ...wrongDynamicVariables,
               [activeTab]: dynamicError,
-              EMAIL_SUBJECT: []
+              EMAIL_SUBJECT: null
             }
           });
         }
@@ -364,7 +369,7 @@ class ResultTable extends React.Component {
           !emailSubjectData.variableMap[matchedString]
         ) {
           error = true;
-          emailSubjectDynamicError.push(emailSubjectDynamicVaiables);
+          emailSubjectDynamicError.push(emailSubjectDynamicVaiable);
           this.setState({
             wrongDynamicVariables: {
               ...wrongDynamicVariables,
@@ -386,7 +391,7 @@ class ResultTable extends React.Component {
           !emailSubjectData.variableMap[matchedString]
         ) {
           error = true;
-          emailSubjectDynamicError.push(emailSubjectDynamicVaiables);
+          emailSubjectDynamicError.push(emailSubjectDynamicVaiable);
         }
       });
 
@@ -415,7 +420,7 @@ class ResultTable extends React.Component {
         data.templateContent = content;
         emailSubjectData.templateContent = emailSubjectContent;
         // data.state = "DRAFT";
-        // emailSubjectData.state = "DRAFT";
+        emailSubjectData.state = "DRAFT";
         AlertTemplateService.saveTemplate(data);
         AlertTemplateService.saveTemplate(emailSubjectData);
         this.setState({
@@ -473,18 +478,41 @@ class ResultTable extends React.Component {
   onPublish = () => {
     const { alertTemplateStore } = this.props;
     const { edited } = this.state;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
+    const activeTab =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
+    const activeTabEmailSubject =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected.length > 1 &&
+      alertTemplateStore.templateContentTypes.selected[1];
     let data;
+    let emailSubjectData;
     alertTemplateStore.alertTemplates.forEach(element => {
       if (element.templateContentType === activeTab) {
         data = element;
       }
+      if (element.templateContentType === activeTabEmailSubject)
+        emailSubjectData = element;
     });
-    // data.state = "PUBLISHED";
-    this.setState({
-      edited: { ...edited, [activeTab]: false }
-    });
+
+    if (activeTabEmailSubject) {
+      // data.state = "PUBLISHED";
+      emailSubjectData.state = "PUBLISHED";
+      this.setState({
+        edited: {
+          ...edited,
+          [activeTab]: false,
+          [activeTabEmailSubject]: false
+        }
+      });
+    } else {
+      // data.state = "PUBLISHED";
+      this.setState({
+        edited: { ...edited, [activeTab]: false }
+      });
+    }
     AlertTemplateService.publishTemplate(data);
+    AlertTemplateService.publishTemplate(emailSubjectData);
     // data.state = undefined;
   };
 
@@ -536,14 +564,6 @@ class ResultTable extends React.Component {
     this.setState({
       confirmRejectModalShow: true
     });
-  };
-
-  handleMouseEnterOnRow = index => {
-    this.setState({ hoverIndex: index });
-  };
-
-  handleMouseLeaveonRow = () => {
-    this.setState({ hoverIndex: null });
   };
 
   onClickDisabled = e => {
@@ -687,7 +707,19 @@ class ResultTable extends React.Component {
       { label: "Alert Source", value: "vendor", column: "col-xs-2" }
     ];
     const { alertTypeStore, alertTemplateStore } = this.props;
-    const activeTab = alertTemplateStore.templateContentTypes.selected;
+    const activeTab =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
+    const activeTabEmailSubject =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected.length > 1 &&
+      alertTemplateStore.templateContentTypes.selected[1];
+    let rejectModalContent;
+    if (activeTabEmailSubject) {
+      rejectModalContent = "EMAIL";
+    } else {
+      rejectModalContent = activeTab;
+    }
     const {
       sortKey,
       sortOrder,
@@ -729,7 +761,7 @@ class ResultTable extends React.Component {
         <ConfirmModal
           show={confirmRejectModalShow}
           close={this.declineRejectEditing}
-          content={`You want to reject changes in ${activeTab}`}
+          content={`You want to reject changes in ${rejectModalContent}`}
           confirmHandler={this.continueRejectEditing}
           successText="Yes"
           failText="No"
