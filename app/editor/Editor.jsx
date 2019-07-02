@@ -43,29 +43,33 @@ class Editor extends React.Component {
                 height="88px"
                 data={emailSubjectData}
                 finalRemove={finalRemove}
+                activeTabEmailSubject={activeTabEmailSubject}
               />
             )}
             {activeTab === "EMAIL_BODY" && (
               <div className="heading-margin-top-bottom">Email Body</div>
             )}
-            <CKEditor
-              activeClass="p10"
-              content={data.changedContent}
-              events={{
-                mode: onChangeSource,
-                change: onChange
-              }}
-              config={{
-                language: data.locale,
-                height,
-                removePlugins: "resize,elementspath",
-                toolbarCanCollapse: true,
-                allowedContent: true,
-                disableAutoInline: true,
-                forcePasteAsPlainText: true,
-                removeButtons: finalRemove
-              }}
-            />
+            <div id="hello">
+              <CKEditor
+                activeClass="p10"
+                content={data.changedContent}
+                events={{
+                  mode: onChangeSource,
+                  change: onChange
+                }}
+                config={{
+                  language: data.locale,
+                  id: `${activeTab}`,
+                  height,
+                  removePlugins: "resize,elementspath",
+                  toolbarCanCollapse: true,
+                  allowedContent: true,
+                  disableAutoInline: true,
+                  forcePasteAsPlainText: true,
+                  removeButtons: finalRemove
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

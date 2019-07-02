@@ -41,6 +41,9 @@ class CKEditor extends React.Component {
 
   componentWillUnmount() {
     this.unmounting = true;
+    Object.keys(window.CKEDITOR.instances).forEach(name => {
+      window.CKEDITOR.instances[name].destroy();
+    });
   }
 
   onLoad() {
@@ -58,8 +61,9 @@ class CKEditor extends React.Component {
     }
 
     window.CKEDITOR.dtd.$removeEmpty.span = false;
+    window.CKEDITOR.name = "hello";
 
-   /* if (!window.CKEDITOR.plugins.get("dragFields")) {
+    /* if (!window.CKEDITOR.plugins.get("dragFields")) {
       window.CKEDITOR.plugins.add("dragFields", {
         init(editor) {
           editor.on("paste", function(evt) {
@@ -74,7 +78,6 @@ class CKEditor extends React.Component {
     // window.CKEDITOR.inline( 'my_editor', {
     // extraPlugins: 'dragFields'
     // /} );
-
     this.editorInstance = window.CKEDITOR.appendTo(
       ReactDOM.findDOMNode(this),
       this.state.config,
@@ -86,7 +89,7 @@ class CKEditor extends React.Component {
       // const eventHandler = this.props.events[event];
       // this.editorInstance.on(event, eventHandler);
       const { events } = this.props;
-      const {editorInstance} = this;
+      const { editorInstance } = this;
       if (event == "mode") {
         editorInstance.on(event, function() {
           const eventHandler = events[event];

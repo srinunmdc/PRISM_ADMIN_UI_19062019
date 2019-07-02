@@ -211,7 +211,6 @@ class ResultTable extends React.Component {
 
   onChange = evt => {
     const { alertTemplateStore } = this.props;
-
     const activeTab =
       alertTemplateStore.templateContentTypes.selected &&
       alertTemplateStore.templateContentTypes.selected[0];
@@ -518,7 +517,7 @@ class ResultTable extends React.Component {
 
   onCancel = () => {
     const { alertTemplateStore } = this.props;
-    const { edited, showAlert } = this.state;
+    const { edited, showAlert, updatePreview } = this.state;
     const activeTab =
       alertTemplateStore.templateContentTypes.selected &&
       alertTemplateStore.templateContentTypes.selected[0];
@@ -550,13 +549,25 @@ class ResultTable extends React.Component {
       });
       data.changedContent = data.templateContent;
       emailSubjectData.changedContent = emailSubjectData.templateContent;
+      const allInstances = window.CKEDITOR.instances;
+      Object.keys(allInstances).forEach(i => {
+        if (allInstances[i].config.id === activeTabEmailSubject) {
+          allInstances[i].setData(emailSubjectData.changedContent);
+        } else {
+          allInstances[i].setData(data.changedContent);
+        }
+      });
     } else {
       this.setState({
         edited: { ...edited, [activeTab]: false },
         showAlert: { ...showAlert, [activeTab]: false },
-        wrongDynamicVariables: {}
+        wrongDynamicVariables: {},
+        updatePreview: updatePreview + 1
       });
       data.changedContent = data.templateContent;
+      window.CKEDITOR.instances[
+        Object.keys(window.CKEDITOR.instances)[0]
+      ].setData(data.changedContent);
     }
   };
 
