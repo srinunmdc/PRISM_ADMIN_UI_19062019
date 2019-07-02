@@ -521,6 +521,14 @@ class ResultTable extends React.Component {
       });
       data.changedContent = data.templateContent;
       emailSubjectData.changedContent = emailSubjectData.templateContent;
+      const allInstances = window.CKEDITOR.instances;
+      Object.keys(allInstances).forEach(i => {
+        if (allInstances[i].config.id === activeTabEmailSubject) {
+          allInstances[i].setData(emailSubjectData.changedContent);
+        } else {
+          allInstances[i].setData(data.changedContent);
+        }
+      });
     } else {
       this.setState({
         edited: { ...edited, [activeTab]: false },
@@ -529,8 +537,10 @@ class ResultTable extends React.Component {
         updatePreview: updatePreview + 1
       });
       data.changedContent = data.templateContent;
+      window.CKEDITOR.instances[
+        Object.keys(window.CKEDITOR.instances)[0]
+      ].setData(data.changedContent);
     }
-    CKEDITOR.instances["editor2"].setData(data.changedContent);
   };
 
   onReject = () => {

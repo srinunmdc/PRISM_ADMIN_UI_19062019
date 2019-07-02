@@ -43,6 +43,7 @@ class Editor extends React.Component {
                 height="88px"
                 data={emailSubjectData}
                 finalRemove={finalRemove}
+                activeTabEmailSubject={activeTabEmailSubject}
               />
             )}
             {activeTab === "EMAIL_BODY" && (
@@ -58,7 +59,7 @@ class Editor extends React.Component {
                 }}
                 config={{
                   language: data.locale,
-                  bodyId: `${activeTab}`,
+                  id: `${activeTab}`,
                   height,
                   removePlugins: "resize,elementspath",
                   toolbarCanCollapse: true,

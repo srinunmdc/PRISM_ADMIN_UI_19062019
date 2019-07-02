@@ -2,7 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import CKEditor from "./NewCKEditor";
 
-const Subject = ({ data, height, finalRemove, onChange, onChangeSource }) => {
+const Subject = ({
+  data,
+  height,
+  finalRemove,
+  onChange,
+  onChangeSource,
+  activeTabEmailSubject
+}) => {
   return (
     <React.Fragment>
       <div className="heading-margin-bottom">Subject</div>
@@ -17,6 +24,7 @@ const Subject = ({ data, height, finalRemove, onChange, onChangeSource }) => {
           config={{
             language: data.locale,
             height,
+            id: activeTabEmailSubject,
             removePlugins: "resize,elementspath,toolbar",
             toolbarCanCollapse: true,
             allowedContent: true,
