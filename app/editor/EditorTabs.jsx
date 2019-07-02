@@ -70,13 +70,37 @@ class EditorTabs extends React.Component {
       );
     }
 
+    if (
+      wrongDynamicVariables[activeTabEmailSubject] &&
+      wrongDynamicVariables[activeTab]
+    ) {
+      unsupportedKeywords += ", ";
+    }
+
+    if (
+      !wrongDynamicVariables[activeTabEmailSubject] &&
+      wrongDynamicVariables[activeTab]
+    ) {
+      unsupportedKeywords = "";
+    }
+
     if (wrongDynamicVariables[activeTab]) {
       unsupportedKeywords += wrongDynamicVariables[activeTab].join(",  ");
     }
 
+    let wrongDynamicVariablesCount = 0;
+
+    if (wrongDynamicVariables[activeTabEmailSubject]) {
+      wrongDynamicVariablesCount +=
+        wrongDynamicVariables[activeTabEmailSubject].length;
+    }
+
+    if (wrongDynamicVariables[activeTab]) {
+      wrongDynamicVariablesCount += wrongDynamicVariables[activeTab].length;
+    }
+    console.log("Count = ", wrongDynamicVariablesCount)
     const highlightedMessage =
-      wrongDynamicVariables[activeTab] &&
-      wrongDynamicVariables[activeTab].length > 1
+      wrongDynamicVariablesCount > 1
         ? "Unsupported Keywords "
         : "Unsupported Keyword";
     if (!data) {
