@@ -291,3 +291,11 @@ ul, ol {
 .white-background{
     background-color: white;
 }
+
+.flex-direction-row-reverse{
+    flex-direction: row-reverse;
+}
+
+.margin-bottom-20{
+    margin-bottom: 20px;
+}
