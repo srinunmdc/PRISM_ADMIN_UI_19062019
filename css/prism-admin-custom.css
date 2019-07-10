@@ -292,6 +292,9 @@ ul, ol {
     background-color: white;
 }
 
+.fulscreen-modal {
+    width: 640px !important;
+}
 .flex-direction-row-reverse{
     flex-direction: row-reverse;
 }
