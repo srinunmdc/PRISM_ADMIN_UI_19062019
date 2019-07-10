@@ -295,3 +295,10 @@ ul, ol {
 .fulscreen-modal {
     width: 640px !important;
 }
+.flex-direction-row-reverse{
+    flex-direction: row-reverse;
+}
+
+.margin-bottom-20{
+    margin-bottom: 20px;
+}
