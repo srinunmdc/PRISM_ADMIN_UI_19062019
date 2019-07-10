@@ -291,3 +291,7 @@ ul, ol {
 .white-background{
     background-color: white;
 }
+
+.fulscreen-modal {
+    width: 640px !important;
+}
