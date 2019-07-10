@@ -31,7 +31,7 @@ const FullScreenModal = ({ show, close, content, subjectContent }) => {
         role="dialog"
         aria-labelledby="modalExample3"
       >
-        <div className="modal-dialog modal-lg" role="document">
+        <div className="modal-dialog modal-lg fulscreen-modal" role="document">
           <div className="modal-content">
             {/*  <div className="modal-header">
               <button
