@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Backdrop from "./backdrop";
 
-const FullScreenModal = ({ show, close, content, subjectContent }) => {
+const FullScreenModal = ({ show, close, content, subjectContent, border_class }) => {
   const modalClassesArr = ["modal", "fade"];
 
   let backdrop = null;
@@ -59,6 +59,7 @@ const FullScreenModal = ({ show, close, content, subjectContent }) => {
                   <div>
                     <div className="preview-email-subject">Email Subject</div>
                     <div
+                      className={border_class}
                       dangerouslySetInnerHTML={{
                         __html: subjectContent
                       }}
@@ -70,6 +71,7 @@ const FullScreenModal = ({ show, close, content, subjectContent }) => {
                     <div className="preview-email-subject">Email Body</div>
                   )}
                   <div
+                    className={border_class}
                     dangerouslySetInnerHTML={{
                       __html: content
                     }}

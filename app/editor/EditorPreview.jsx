@@ -104,6 +104,7 @@ class EditorPreview extends React.Component {
         <FullScreenModal
           show={modalShow}
           close={this.closeModal}
+          border_class={border_class}
           subjectContent={
             emailSubjectData &&
             replaceDynamicVariable(
