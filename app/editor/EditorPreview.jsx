@@ -37,6 +37,7 @@ class EditorPreview extends React.Component {
     const { modalShow } = this.state;
 
     const height = activeTab === "EMAIL_BODY" ? "490px" : "300px";
+    const border_class = activeTab === "EMAIL_BODY" ? "preview_border" : "";
     const previewDivStyle = {
       border: "1px solid #d1d1d1",
       overflow: "auto",
@@ -75,6 +76,7 @@ class EditorPreview extends React.Component {
               <div>
                 <div className="preview-email-subject">Email Subject</div>
                 <div
+                  className={border_class}
                   dangerouslySetInnerHTML={{
                     __html: replaceDynamicVariable(
                       emailSubjectData.previewContent,
@@ -89,6 +91,7 @@ class EditorPreview extends React.Component {
               <div className="preview-email-body">Email Body</div>
             )}
             <div
+              className={border_class}
               dangerouslySetInnerHTML={{
                 __html: replaceDynamicVariable(
                   data.previewContent,
