@@ -101,12 +101,12 @@ class ResultTable extends React.Component {
 
   expandAccordian = (e, alertTypeResource, deliveryType) => {
     e.stopPropagation();
-    if (
-      deliveryType &&
-      !alertTypeResource.deliveryTypes.includes(deliveryType)
-    ) {
-      return;
-    }
+    // if (
+    //   deliveryType &&
+    //   !alertTypeResource.deliveryTypes.includes(deliveryType)
+    // ) {
+    //   return;
+    // }
     const onClickChannel = !!deliveryType;
     const { collapseID, edited } = this.state;
     // const deliveryTypes = alertTypeResource.deliveryTypes

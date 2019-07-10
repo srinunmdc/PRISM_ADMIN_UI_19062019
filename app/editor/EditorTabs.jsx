@@ -6,12 +6,20 @@ import EditorControl from "./EditorControl";
 import EditorPreview from "./EditorPreview";
 import AlertTemplateResourceStore from "../store/AlertTemplateStore";
 import Alert from "../Alert";
+import ToggleSwitch from "../ToggleSwitch";
 
 @inject("alertPermissionStore", "alertTemplateStore")
 @observer
 class EditorTabs extends React.Component {
+  constructor(props){
+    super(props);
+  }
   onClickTabItem(tab) {
     AlertTemplateResourceStore.setSelectedContentType(tab);
+  }
+
+  onToggle = () => {
+    //Code here when you toggle the switch
   }
 
   render() {
@@ -34,13 +42,11 @@ class EditorTabs extends React.Component {
       closeAlert,
       wrongDynamicVariables
     } = this.props;
-
     const tabLabels = {
       EMAIL_BODY: "Email",
       SMS_BODY: "Sms",
       PUSH_BODY: "Push"
     };
-
     const activeTab =
       alertTemplateStore.templateContentTypes.selected &&
       alertTemplateStore.templateContentTypes.selected[0];
@@ -98,7 +104,6 @@ class EditorTabs extends React.Component {
     if (wrongDynamicVariables[activeTab]) {
       wrongDynamicVariablesCount += wrongDynamicVariables[activeTab].length;
     }
-    console.log("Count = ", wrongDynamicVariablesCount)
     const highlightedMessage =
       wrongDynamicVariablesCount > 1
         ? "Unsupported Keywords "
@@ -119,6 +124,8 @@ class EditorTabs extends React.Component {
             />
           </div>
         </div>
+        <div className="flex row-xs-1 flex-direction-row-reverse margin-bottom-20">
+          <div>{tabLabels[activeTab]}<div><ToggleSwitch onClick={this.onToggle} /></div></div></div>
         <div className="flex editor-wrapper">
           {role !== "view" && (
             <div className="editor-left-wrapper" style={{ minHeight: "361px" }}>
