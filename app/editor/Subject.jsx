@@ -10,6 +10,7 @@ const Subject = ({
   onChangeSource,
   activeTabEmailSubject
 }) => {
+  finalRemove = `${finalRemove  },Bold,Italic,Underline,Format,Cut,Copy,Paste,Undo,Redo,Source`;
   return (
     <React.Fragment>
       <div className="heading-margin-bottom">Subject</div>
@@ -25,8 +26,8 @@ const Subject = ({
             language: data.locale,
             height,
             id: activeTabEmailSubject,
-            removePlugins: "resize,elementspath,toolbar",
-            toolbarCanCollapse: true,
+            removePlugins: "resize,elementspath",
+            toolbarCanCollapse: false,
             allowedContent: true,
             disableAutoInline: true,
             forcePasteAsPlainText: true,
