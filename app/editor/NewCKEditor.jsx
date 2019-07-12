@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { inject, observer } from "mobx-react";
 // const loadScript = require('load-script');
 
-const defaultScriptUrl = "https://cdn.ckeditor.com/4.6.2/standard/ckeditor.js";
+const defaultScriptUrl = "https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js";
 
 /**
  * @author codeslayer1

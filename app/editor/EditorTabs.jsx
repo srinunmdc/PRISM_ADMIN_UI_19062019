@@ -11,16 +11,17 @@ import ToggleSwitch from "../ToggleSwitch";
 @inject("alertPermissionStore", "alertTemplateStore")
 @observer
 class EditorTabs extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
   }
+
   onClickTabItem(tab) {
     AlertTemplateResourceStore.setSelectedContentType(tab);
   }
 
   onToggle = () => {
-    //Code here when you toggle the switch
-  }
+    // Code here when you toggle the switch
+  };
 
   render() {
     const {
@@ -37,6 +38,7 @@ class EditorTabs extends React.Component {
       onPreview,
       handlePreview,
       updatePreview,
+      updateWarning,
       onClickEdit,
       showAlert,
       closeAlert,
@@ -66,6 +68,10 @@ class EditorTabs extends React.Component {
     const role = alertPermissionStore.permissions.role.toLocaleLowerCase();
     const showAlertClass =
       showAlert[activeTab] || showAlert[activeTabEmailSubject]
+        ? {}
+        : { display: "none" };
+    const showWarningClass =
+      updateWarning[activeTab] || updateWarning[activeTabEmailSubject]
         ? {}
         : { display: "none" };
 
@@ -108,6 +114,17 @@ class EditorTabs extends React.Component {
       wrongDynamicVariablesCount > 1
         ? "Unsupported Keywords "
         : "Unsupported Keyword";
+    let validationWarning = "";
+    console.log("Active tab warning: ===", updateWarning[activeTab]);
+    console.log("Active tabSubject warning: ===", updateWarning[activeTabEmailSubject]);
+    if (updateWarning[activeTab] && updateWarning[activeTabEmailSubject]) {
+      validationWarning = `Text length increased for ${activeTab}, ${activeTabEmailSubject}`;
+    } else if (updateWarning[activeTab]) {
+      validationWarning = `Text length increased for ${activeTab}`;
+    } else if (updateWarning[activeTabEmailSubject]) {
+      validationWarning = `Text length increased for ${activeTabEmailSubject}`;
+    }
+    console.log("Validation Warning : ====", validationWarning);
     if (!data) {
       return null;
     }
@@ -124,8 +141,26 @@ class EditorTabs extends React.Component {
             />
           </div>
         </div>
+
+        <div style={showWarningClass}>
+          <div className="row-xs-1">
+            <Alert
+              alertClass="warning"
+              detailMessage={validationWarning}
+              showCloseIcon
+              // handleClose={closeAlert}
+            />
+          </div>
+        </div>
+
         <div className="flex row-xs-1 flex-direction-row-reverse margin-bottom-20">
-          <div>{tabLabels[activeTab]}<div><ToggleSwitch onClick={this.onToggle} /></div></div></div>
+          <div>
+            {tabLabels[activeTab]}
+            <div>
+              <ToggleSwitch onClick={this.onToggle} />
+            </div>
+          </div>
+        </div>
         <div className="flex editor-wrapper">
           {role !== "view" && (
             <div className="editor-left-wrapper" style={{ minHeight: "361px" }}>

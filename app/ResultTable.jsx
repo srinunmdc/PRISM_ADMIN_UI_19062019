@@ -27,7 +27,8 @@ class ResultTable extends React.Component {
       showAlert: {},
       hoverIndex: null,
       wrongDynamicVariables: {},
-      updatePreview: 0
+      updatePreview: 0,
+      updateWarning: {}
     };
     this.sortFields = this.sortFields.bind(this);
     this.setCollapseId = this.setCollapseId.bind(this);
@@ -466,8 +467,117 @@ class ResultTable extends React.Component {
       if (element.templateContentType === activeTabEmailSubject)
         emailSubjectData = element;
     });
+
+    const toBeChanged = 50;
+    const { updateWarning } = this.state;
+    if (!emailSubjectData) {
+      console.log("Not Email");
+      if (data.changedContent.length > toBeChanged) {
+        console.log("Greater====", data.changedContent.length);
+        this.setState({
+          updateWarning: { ...updateWarning, [activeTab]: true }
+        });
+      }
+
+      if (data.changedContent.length <= toBeChanged) {
+        console.log("Less====", data.changedContent.length);
+        this.setState({
+          updateWarning: { ...updateWarning, [activeTab]: false }
+        });
+      }
+    }
+
     data.previewContent = data.changedContent;
+
     if (emailSubjectData) {
+      // if (
+      //   emailSubjectData.changedContent.length > toBeChanged &&
+      //   data.changedContent.length > toBeChanged
+      // ) {
+      //   this.setState({
+      //     updateWarning: {
+      //       ...updateWarning,
+      //       [activeTabEmailSubject]: true,
+      //       [activeTab]: true
+      //     }
+      //   });
+      // } else if (emailSubjectData.changedContent.length > toBeChanged) {
+      //   this.setState({
+      //     updateWarning: {
+      //       ...updateWarning,
+      //       [activeTab]: false,
+      //       [activeTabEmailSubject]: true
+      //     }
+      //   });
+      // }
+
+      // if (
+      //   emailSubjectData.changedContent.length <= toBeChanged &&
+      //   data.changedContent.length <= toBeChanged
+      // ) {
+      //   debugger
+      //   this.setState({
+      //     updateWarning: {
+      //       ...updateWarning,
+      //       [activeTabEmailSubject]: false,
+      //       [activeTab]: false
+      //     }
+      //   });
+      // } else if (
+      //   emailSubjectData.changedContent.length <= toBeChanged &&
+      //   data.changedContent.length > toBeChanged
+      // ) {
+      //   this.setState({
+      //     updateWarning: {
+      //       ...updateWarning,
+      //       [activeTabEmailSubject]: false,
+      //       [activeTab]: true
+      //     }
+      //   });
+      // }
+      if (
+        emailSubjectData.changedContent.length > toBeChanged &&
+        data.changedContent.length <= toBeChanged
+      ) {
+        this.setState({
+          updateWarning: {
+            ...updateWarning,
+            [activeTabEmailSubject]: true,
+            [activeTab]: false
+          }
+        });
+      } else if (
+        emailSubjectData.changedContent.length <= toBeChanged &&
+        data.changedContent.length > toBeChanged
+      ) {
+        this.setState({
+          updateWarning: {
+            ...updateWarning,
+            [activeTabEmailSubject]: false,
+            [activeTab]: true
+          }
+        });
+      } else if (
+        emailSubjectData.changedContent.length > toBeChanged &&
+        data.changedContent.length > toBeChanged
+      ) {
+        this.setState({
+          updateWarning: {
+            ...updateWarning,
+            [activeTabEmailSubject]: true,
+            [activeTab]: true
+          }
+        });
+      } else {
+        this.setState({
+          updateWarning: {
+            ...updateWarning,
+            [activeTabEmailSubject]: false,
+            [activeTab]: false
+          }
+        });
+      }
+
       emailSubjectData.previewContent = emailSubjectData.changedContent;
     }
     const { updatePreview } = this.state;
@@ -588,7 +698,8 @@ class ResultTable extends React.Component {
       showAlert,
       wrongDynamicVariables,
       rejectAlert,
-      updatePreview
+      updatePreview,
+      updateWarning
     } = this.state;
     const hidden = { opacity: 0.5 };
     const { alertTemplateStore } = this.props;
@@ -672,6 +783,7 @@ class ResultTable extends React.Component {
                     onPreview={this.onPreview}
                     handlePreview={this.handlePreview}
                     updatePreview={updatePreview}
+                    updateWarning={updateWarning}
                     onClickEdit={this.onClickEdit}
                     showAlert={showAlert}
                     closeAlert={this.closeAlert}
