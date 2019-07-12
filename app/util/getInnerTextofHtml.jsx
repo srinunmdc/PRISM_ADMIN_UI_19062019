@@ -1,8 +1,8 @@
-const innerTextOfSpans = data => {
+const getInnerTextofHtml = data => {
   const element = document.createElement("div");
   element.innerHTML = data;
   const ans = element.innerText;
   return ans;
 };
 
-export default innerTextOfSpans;
+export default getInnerTextofHtml;
