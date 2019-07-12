@@ -36,7 +36,7 @@ class EditorPreview extends React.Component {
 
     const { modalShow } = this.state;
 
-    const height = activeTab === "EMAIL_BODY" ? "490px" : "300px";
+    const height = activeTab === "EMAIL_BODY" ? "497px" : "300px";
     const border_class = activeTab === "EMAIL_BODY" ? "preview_border" : "";
     const previewDivStyle = {
       border: "1px solid #d1d1d1",
