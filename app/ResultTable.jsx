@@ -77,14 +77,14 @@ class ResultTable extends React.Component {
     this.setState({
       validationModalShow: false
     });
-  }
+  };
 
   continueSavingDraft = () => {
     this.setState({
       validationModalShow: false
     });
-    this.onDraft(false)
-  }
+    this.onDraft(false);
+  };
 
   continueRejectEditing = () => {
     this.setState({ confirmRejectModalShow: false });
@@ -333,19 +333,25 @@ class ResultTable extends React.Component {
     });
 
     const regex = /\${[^$]*?\}/g;
-    if(validate){
-      const dataPreviewed = getInnerTextofHtml(replaceDynamicVariable(data.changedContent));
-      let warningTabs = [];
-      if(emailSubjectData){
-        const emailSubjectPreviewed = getInnerTextofHtml(replaceDynamicVariable(emailSubjectData.changedContent));
-        if(emailSubjectPreviewed.length > toBeChanged){
+    if (validate) {
+      const dataPreviewed = getInnerTextofHtml(
+        replaceDynamicVariable(data.changedContent)
+      );
+      const warningTabs = [];
+      if (emailSubjectData) {
+        const emailSubjectPreviewed = getInnerTextofHtml(
+          replaceDynamicVariable(emailSubjectData.changedContent)
+        );
+        if (emailSubjectPreviewed.length > toBeChanged) {
           warningTabs.push("EMAIL_SUBJECT");
         }
       }
-      if(dataPreviewed.length > toBeChanged){
+      if (dataPreviewed.length > toBeChanged) {
         warningTabs.push(activeTab);
       }
-      const msg = "The length in" + " " + warningTabs.join() + " " +"exceeds the given length. Do you want to continue?";
+      const msg =
+        `${"The length in "}${warningTabs.join()} ` +
+        `exceeds the given length. Do you want to continue?`;
       this.setState({
         validationModalShow: true,
         validationMessage: msg
@@ -357,7 +363,9 @@ class ResultTable extends React.Component {
     const content = data.changedContent;
     const dynamicError = [];
     const emailSubjectDynamicError = [];
-    const dynamicVariables = getInnerTextofHtml(data.changedContent).match(regex);
+    const dynamicVariables = getInnerTextofHtml(data.changedContent).match(
+      regex
+    );
     let emailSubjectContent;
     let emailSubjectDynamicVaiables;
     if (activeTabEmailSubject) {
@@ -505,15 +513,17 @@ class ResultTable extends React.Component {
 
     const toBeChanged = 50;
     const { updateWarning } = this.state;
-    
+    const dataPreviewed = getInnerTextofHtml(
+      replaceDynamicVariable(data.changedContent)
+    );
     if (!emailSubjectData) {
-      if (data.changedContent.length > toBeChanged) {
+      if (dataPreviewed.length > toBeChanged) {
         this.setState({
           updateWarning: { ...updateWarning, [activeTab]: true }
         });
       }
 
-      if (data.changedContent.length <= toBeChanged) {
+      if (dataPreviewed.length <= toBeChanged) {
         this.setState({
           updateWarning: { ...updateWarning, [activeTab]: false }
         });
@@ -523,9 +533,12 @@ class ResultTable extends React.Component {
     data.previewContent = data.changedContent;
 
     if (emailSubjectData) {
+      const emailSubjectPreviewed = getInnerTextofHtml(
+        replaceDynamicVariable(emailSubjectData.changedContent)
+      );
       if (
-        emailSubjectData.changedContent.length > toBeChanged &&
-        data.changedContent.length <= toBeChanged
+        emailSubjectPreviewed.length > toBeChanged &&
+        dataPreviewed.length <= toBeChanged
       ) {
         this.setState({
           updateWarning: {
@@ -535,8 +548,8 @@ class ResultTable extends React.Component {
           }
         });
       } else if (
-        emailSubjectData.changedContent.length <= toBeChanged &&
-        data.changedContent.length > toBeChanged
+        emailSubjectPreviewed.length <= toBeChanged &&
+        dataPreviewed.length > toBeChanged
       ) {
         this.setState({
           updateWarning: {
@@ -546,8 +559,8 @@ class ResultTable extends React.Component {
           }
         });
       } else if (
-        emailSubjectData.changedContent.length > toBeChanged &&
-        data.changedContent.length > toBeChanged
+        emailSubjectPreviewed.length > toBeChanged &&
+        dataPreviewed.length > toBeChanged
       ) {
         this.setState({
           updateWarning: {
