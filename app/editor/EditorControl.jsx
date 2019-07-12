@@ -86,6 +86,7 @@ class EditorConrol extends React.Component {
             </button>
           </div>
         ) : null}
+        
       </div>
     );
   }

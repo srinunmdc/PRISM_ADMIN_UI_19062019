@@ -5,10 +5,11 @@ import { observer, inject } from "mobx-react";
 import Thead from "./table-head";
 import sort from "./util/sort";
 import addSpans from "./util/addSpans";
-import innerTextOfSpans from "./util/innerTextOfSpans";
+import getInnerTextofHtml from "./util/getInnerTextofHtml";
 import EditorTabs from "./editor/EditorTabs";
 import AlertTemplateResourceStore from "./store/AlertTemplateStore";
 import AlertTemplateService from "./service/AlertTemplateService";
+import replaceDynamicVariable from "./util/replaceDynamicVariable";
 import ConfirmModal from "./ConfirmModal";
 
 @inject("alertTypeStore", "alertTemplateStore")
@@ -25,6 +26,8 @@ class ResultTable extends React.Component {
       confirmModalShow: false,
       confirmRejectModalShow: false,
       showAlert: {},
+      validationModalShow: false,
+      validationMessage: "",
       hoverIndex: null,
       wrongDynamicVariables: {},
       updatePreview: 0,
@@ -68,6 +71,19 @@ class ResultTable extends React.Component {
       confirmRejectModalShow: false
     });
   };
+
+  declineValidation = () => {
+    this.setState({
+      validationModalShow: false
+    });
+  }
+
+  continueSavingDraft = () => {
+    this.setState({
+      validationModalShow: false
+    });
+    this.onDraft(false)
+  }
 
   continueRejectEditing = () => {
     this.setState({ confirmRejectModalShow: false });
@@ -295,8 +311,9 @@ class ResultTable extends React.Component {
     // AlertTemplateResourceStore.updateTemplateResource(this.props.data)
   };
 
-  onDraft = () => {
+  onDraft = (validate = true) => {
     const { alertTemplateStore } = this.props;
+    const toBeChanged = 50;
     const { edited, wrongDynamicVariables, showAlert } = this.state;
     const activeTab =
       alertTemplateStore.templateContentTypes.selected &&
@@ -315,13 +332,31 @@ class ResultTable extends React.Component {
     });
 
     const regex = /\${[^$]*?\}/g;
-
+    if(validate){
+      const dataPreviewed = getInnerTextofHtml(replaceDynamicVariable(data.changedContent));
+      let warningTabs = [];
+      if(emailSubjectData){
+        const emailSubjectPreviewed = getInnerTextofHtml(replaceDynamicVariable(emailSubjectData.changedContent));
+        if(emailSubjectPreviewed.length > toBeChanged){
+          warningTabs.push("EMAIL_SUBJECT");
+        }
+      }
+      if(dataPreviewed.length > toBeChanged){
+        warningTabs.push(activeTab);
+      }
+      const msg = "The length in" + " " + warningTabs.join() + " " +"exceeds the given length. Do you want to continue?";
+      this.setState({
+        validationModalShow: true,
+        validationMessage: msg
+      });
+      return;
+    }
     data.changedContent = data.changedContent.replace(/(&zwnj;)/g, "");
     data.changedContent = addSpans(data.changedContent);
     const content = data.changedContent;
     const dynamicError = [];
     const emailSubjectDynamicError = [];
-    const dynamicVariables = innerTextOfSpans(data.changedContent).match(regex);
+    const dynamicVariables = getInnerTextofHtml(data.changedContent).match(regex);
     let emailSubjectContent;
     let emailSubjectDynamicVaiables;
     if (activeTabEmailSubject) {
@@ -333,11 +368,10 @@ class ResultTable extends React.Component {
         emailSubjectData.changedContent
       );
       emailSubjectContent = emailSubjectData.changedContent;
-      emailSubjectDynamicVaiables = innerTextOfSpans(
+      emailSubjectDynamicVaiables = getInnerTextofHtml(
         emailSubjectData.changedContent
       ).match(regex);
     }
-
     if (dynamicVariables && !emailSubjectDynamicVaiables) {
       dynamicVariables.forEach(dynamicVariable => {
         const matchedString = dynamicVariable.substring(
@@ -470,17 +504,15 @@ class ResultTable extends React.Component {
 
     const toBeChanged = 50;
     const { updateWarning } = this.state;
+    
     if (!emailSubjectData) {
-      console.log("Not Email");
       if (data.changedContent.length > toBeChanged) {
-        console.log("Greater====", data.changedContent.length);
         this.setState({
           updateWarning: { ...updateWarning, [activeTab]: true }
         });
       }
 
       if (data.changedContent.length <= toBeChanged) {
-        console.log("Less====", data.changedContent.length);
         this.setState({
           updateWarning: { ...updateWarning, [activeTab]: false }
         });
@@ -848,7 +880,9 @@ class ResultTable extends React.Component {
       sortOrder,
       edited,
       confirmModalShow,
-      confirmRejectModalShow
+      confirmRejectModalShow,
+      validationModalShow,
+      validationMessage
     } = this.state;
     const confirmModalContent = Object.keys(edited)
       .filter(key => edited[key])
@@ -886,6 +920,14 @@ class ResultTable extends React.Component {
           close={this.declineRejectEditing}
           content={`You want to reject changes in ${rejectModalContent}`}
           confirmHandler={this.continueRejectEditing}
+          successText="Yes"
+          failText="No"
+        />
+        <ConfirmModal
+          show={validationModalShow}
+          close={this.declineValidation}
+          content={validationMessage}
+          confirmHandler={this.continueSavingDraft}
           successText="Yes"
           failText="No"
         />
