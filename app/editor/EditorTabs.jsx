@@ -42,6 +42,7 @@ class EditorTabs extends React.Component {
       onClickEdit,
       showAlert,
       closeAlert,
+      closeValidationAlert,
       wrongDynamicVariables
     } = this.props;
     const tabLabels = {
@@ -145,7 +146,7 @@ class EditorTabs extends React.Component {
               alertClass="warning"
               detailMessage={validationWarning}
               showCloseIcon
-              // handleClose={closeAlert}
+              handleClose={closeValidationAlert}
             />
           </div>
         </div>

@@ -53,7 +53,8 @@ class ResultTable extends React.Component {
         confirmModalShow: false,
         edited: {},
         showAlert: {},
-        wrongDynamicVariables: {}
+        wrongDynamicVariables: {},
+        updateWarning: {}
       },
       () => {
         this.resetTemplateStore();
@@ -522,51 +523,6 @@ class ResultTable extends React.Component {
     data.previewContent = data.changedContent;
 
     if (emailSubjectData) {
-      // if (
-      //   emailSubjectData.changedContent.length > toBeChanged &&
-      //   data.changedContent.length > toBeChanged
-      // ) {
-      //   this.setState({
-      //     updateWarning: {
-      //       ...updateWarning,
-      //       [activeTabEmailSubject]: true,
-      //       [activeTab]: true
-      //     }
-      //   });
-      // } else if (emailSubjectData.changedContent.length > toBeChanged) {
-      //   this.setState({
-      //     updateWarning: {
-      //       ...updateWarning,
-      //       [activeTab]: false,
-      //       [activeTabEmailSubject]: true
-      //     }
-      //   });
-      // }
-
-      // if (
-      //   emailSubjectData.changedContent.length <= toBeChanged &&
-      //   data.changedContent.length <= toBeChanged
-      // ) {
-      //   debugger
-      //   this.setState({
-      //     updateWarning: {
-      //       ...updateWarning,
-      //       [activeTabEmailSubject]: false,
-      //       [activeTab]: false
-      //     }
-      //   });
-      // } else if (
-      //   emailSubjectData.changedContent.length <= toBeChanged &&
-      //   data.changedContent.length > toBeChanged
-      // ) {
-      //   this.setState({
-      //     updateWarning: {
-      //       ...updateWarning,
-      //       [activeTabEmailSubject]: false,
-      //       [activeTab]: true
-      //     }
-      //   });
-      // }
       if (
         emailSubjectData.changedContent.length > toBeChanged &&
         data.changedContent.length <= toBeChanged
@@ -819,6 +775,7 @@ class ResultTable extends React.Component {
                     onClickEdit={this.onClickEdit}
                     showAlert={showAlert}
                     closeAlert={this.closeAlert}
+                    closeValidationAlert={this.closeValidationAlert}
                     wrongDynamicVariables={wrongDynamicVariables}
                   />
                 </div>
@@ -844,6 +801,31 @@ class ResultTable extends React.Component {
       showAlert: { ...showAlert, [activeTab]: false },
       rejectAlert: false
     });
+  };
+
+  closeValidationAlert = () => {
+    const { alertTemplateStore } = this.props;
+    const { updateWarning } = this.state;
+    const activeTab =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected[0];
+    const activeTabEmailSubject =
+      alertTemplateStore.templateContentTypes.selected &&
+      alertTemplateStore.templateContentTypes.selected.length > 1 &&
+      alertTemplateStore.templateContentTypes.selected[1];
+    if (activeTabEmailSubject) {
+      this.setState({
+        updateWarning: {
+          ...updateWarning,
+          [activeTab]: false,
+          [activeTabEmailSubject]: false
+        }
+      });
+    } else {
+      this.setState({
+        updateWarning: { ...updateWarning, [activeTab]: false }
+      });
+    }
   };
 
   sortFields(sortKey, sortOrder) {
