@@ -42,6 +42,7 @@ class EditorTabs extends React.Component {
       onClickEdit,
       showAlert,
       closeAlert,
+      closeValidationAlert,
       wrongDynamicVariables
     } = this.props;
     const tabLabels = {
@@ -115,8 +116,6 @@ class EditorTabs extends React.Component {
         ? "Unsupported Keywords "
         : "Unsupported Keyword";
     let validationWarning = "";
-    console.log("Active tab warning: ===", updateWarning[activeTab]);
-    console.log("Active tabSubject warning: ===", updateWarning[activeTabEmailSubject]);
     if (updateWarning[activeTab] && updateWarning[activeTabEmailSubject]) {
       validationWarning = `Text length increased for ${activeTab}, ${activeTabEmailSubject}`;
     } else if (updateWarning[activeTab]) {
@@ -124,7 +123,7 @@ class EditorTabs extends React.Component {
     } else if (updateWarning[activeTabEmailSubject]) {
       validationWarning = `Text length increased for ${activeTabEmailSubject}`;
     }
-    console.log("Validation Warning : ====", validationWarning);
+
     if (!data) {
       return null;
     }
@@ -148,7 +147,7 @@ class EditorTabs extends React.Component {
               alertClass="warning"
               detailMessage={validationWarning}
               showCloseIcon
-              // handleClose={closeAlert}
+              handleClose={closeValidationAlert}
             />
           </div>
         </div>
