@@ -5,7 +5,7 @@
   "author": "skapa",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "load-script": "^1.0.0",
     "mobx": "^4.2.0",
     "mobx-utils": "^4.0.1",
